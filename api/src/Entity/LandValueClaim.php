@@ -27,6 +27,8 @@ class LandValueClaim
      * @var string Service code
      * 
      * @ORM\Column(type="text")
+     * 
+     * @Assert\NotBlank
      */
     public $chServiceCode;
 
@@ -34,6 +36,7 @@ class LandValueClaim
      * @var string Document reference
      * 
      * @ORM\Column(type="text")
+     * @Assert\NotBlank
      */
     public $docReference;
 
@@ -41,6 +44,8 @@ class LandValueClaim
      * @var string Post code
      * 
      * @ORM\Column(type="text")
+     * 
+     * @Assert\NotBlank
      */
     public $postCode;
 
@@ -48,6 +53,8 @@ class LandValueClaim
      * @var string City
      * 
      * @ORM\Column(type="text")
+     * 
+     * @Assert\NotBlank
      */
     public $city;
 
@@ -55,6 +62,8 @@ class LandValueClaim
      * @var string State code
      * 
      * @ORM\Column(type="text")
+     * 
+     * @Assert\NotBlank
      */
     public $stateCode;
 
@@ -62,13 +71,17 @@ class LandValueClaim
      * @var \DateTimeInterface Mutation date
      * 
      * @ORM\Column(type="datetime")
+     * 
+     * @Assert\NotBlank
      */
-    public $mutationDate;
+    public $mutationDate; 
 
     /**
      * @var string Mutation type
      * 
      * @ORM\Column(type="text")
+     * 
+     * @Assert\NotBlank
      */
     public $mutationType;
 
@@ -76,6 +89,8 @@ class LandValueClaim
      * @var int Land value in euros
      * 
      * @ORM\Column(type="integer")
+     * 
+     * @Assert\GreaterThan(0)
      */
     public $value;
 
