@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator\Constraint as AcmeAssert;
 
 /**
  * Land value claim entity
@@ -28,14 +29,15 @@ class LandValueClaim
      * 
      * @ORM\Column(type="text")
      * 
-     * @Assert\NotBlank
+     * @Assert\NotBlank 
      */
     public $chServiceCode;
 
     /**
      * @var string Document reference
      * 
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="string")
+     * 
      * @Assert\NotBlank
      */
     public $docReference;
@@ -43,16 +45,17 @@ class LandValueClaim
     /**
      * @var string Post code
      * 
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="string")
      * 
      * @Assert\NotBlank
+     * @AcmeAssert\Postcode
      */
     public $postCode;
 
     /**
      * @var string City
      * 
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="string")
      * 
      * @Assert\NotBlank
      */
@@ -61,7 +64,7 @@ class LandValueClaim
     /**
      * @var string State code
      * 
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="string")
      * 
      * @Assert\NotBlank
      */
@@ -79,7 +82,7 @@ class LandValueClaim
     /**
      * @var string Mutation type
      * 
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="string")
      * 
      * @Assert\NotBlank
      */
@@ -101,3 +104,4 @@ class LandValueClaim
 }
 
 ?>
+)
