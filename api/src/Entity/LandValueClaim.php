@@ -25,24 +25,6 @@ class LandValueClaim
     private $id;
 
     /**
-     * @var string Service code
-     * 
-     * @ORM\Column(type="text")
-     * 
-     * @Assert\NotBlank 
-     */
-    public $chServiceCode;
-
-    /**
-     * @var string Document reference
-     * 
-     * @ORM\Column(type="string")
-     * 
-     * @Assert\NotBlank
-     */
-    public $docReference;
-
-    /**
      * @var string Post code
      * 
      * @ORM\Column(type="string")
@@ -96,6 +78,14 @@ class LandValueClaim
      * @Assert\GreaterThan(0)
      */
     public $value;
+
+    /**
+     * @var int Land surface in m² (does include the unbuilt land)
+     * 
+     * @ORM\Column(type="integer")
+     * @Assert\GreaterThan(10)
+     */
+    public $surface;
 
     public function getId(): int
     {
