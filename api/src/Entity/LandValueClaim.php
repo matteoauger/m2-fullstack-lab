@@ -35,15 +35,6 @@ class LandValueClaim
     public $postCode;
 
     /**
-     * @var string City
-     * 
-     * @ORM\Column(type="string")
-     * 
-     * @Assert\NotBlank
-     */
-    public $city;
-
-    /**
      * @var \DateTimeInterface Mutation date
      * 
      * @ORM\Column(type="datetime")
