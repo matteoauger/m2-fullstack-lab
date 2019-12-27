@@ -25,7 +25,7 @@ class PostcodeValidator extends ConstraintValidator {
             throw new UnexpectedValueException($value, 'string');
         }
 
-        if (!preg_match('/^[0-9]{5}$/', $value, $matches)) {
+        if (!preg_match('/^[0-9]{4,5}$/', $value, $matches)) {
             // building a constraint violation with the given value 
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ string }}', $value)
