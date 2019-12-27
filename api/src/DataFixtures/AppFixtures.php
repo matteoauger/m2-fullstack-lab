@@ -57,38 +57,62 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-        // Read file
-        $handle = fopen("data/valeursfoncieres-2019.txt", "r");
-        if ($handle) {
-            // Ignore first line
-            fgets($handle, 4096);
-            // Get each lines
-            while (($buffer = fgets($handle, 4096)) !== false) {
-                $data = explode("|", $buffer, 43);
-                    $mutationDate = $data[8] ?: "01/01/2019";
+        $batchSize = 100;
+        $delimiter = "|";
+        $years = [2015, 2016, 2017, 2018, 2019];
+        
+        // Deactivate SQLLogger
+        $config = $manager->getConnection()->getConfiguration();
+        $logger = $config->getSQLLogger();
+        $config->setSQLLogger(null);
+
+        // Load data [2015-2019]
+        foreach ($years as $year) {
+            echo "Year ".$year."... ";
+            $start = time();
+            // Read file
+            if (($handle = fopen("data/valeursfoncieres-".$year.".txt", "r")) !== FALSE) {
+                // Ignore first line (header)
+                fgetcsv($handle, 1000, $delimiter);
+                // Load each lines
+                $i = 0;
+                while (($data = fgetcsv($handle, 1000, $delimiter)) !== FALSE) {
+                    // Format data.
+                    $mutationDate = $data[8] ?: "01/01/".$year;
                     $mutationType = $data[9] ?: "Vente";
                     $value = intval($data[10] ?: "100");
                     $postCode = $data[16] ?: "0000";
                     $city = $data[17] ?: "UNKNOWN";
-                    $stateCode = $data[18] ?: "00";
                     $surface = intval($data[38] ?: "100.00");
 
+                    // Create LandValueClaim object.
                     $lvc = new LandValueClaim();
                     $lvc->mutationDate = DateTime::createFromFormat('d/m/Y', $mutationDate);
                     $lvc->mutationType = $mutationType;
                     $lvc->value = $value;
                     $lvc->postCode = $postCode;
                     $lvc->city = $city;
-                    $lvc->stateCode = $stateCode;
                     $lvc->surface = $surface;
-                    
+
+                    // Insert in PHP cache.
                     $manager->persist($lvc);
+                    if ($i % $batchSize == 0) {
+                        // Send to DB and clear cache.
+                        $manager->flush();
+                        $manager->clear();
+                    }
+                    $i++;
+                    // /* Partial loading (fast) */ if ($i > 1000) break;
+                }
+                // Send to DB and clear cache (last items).
+                $manager->flush();
+                $manager->clear();
+                fclose($handle);
             }
-            if (!feof($handle)) {
-                echo "Error: fgets() has failed\n";
-            }
-            fclose($handle); 
+            $end = time();
+            echo "(".$i." items(s) loaded in ".($end - $start)."s)\n";
         }
-        $manager->flush();
+        // Reactivate SQLLogger
+        $config->setSQLLogger($logger);
     }
 }
