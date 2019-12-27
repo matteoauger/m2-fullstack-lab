@@ -44,15 +44,6 @@ class LandValueClaim
     public $city;
 
     /**
-     * @var string State code
-     * 
-     * @ORM\Column(type="string")
-     * 
-     * @Assert\NotBlank
-     */
-    public $stateCode;
-
-    /**
      * @var \DateTimeInterface Mutation date
      * 
      * @ORM\Column(type="datetime")
@@ -73,7 +64,7 @@ class LandValueClaim
     /**
      * @var int Land value in euros
      * 
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="float")
      * 
      * @Assert\GreaterThan(0)
      */
@@ -82,7 +73,7 @@ class LandValueClaim
     /**
      * @var int Land surface in m² (does include the unbuilt land)
      * 
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="float")
      * @Assert\GreaterThan(10)
      */
     public $surface;
