@@ -25,14 +25,14 @@ class LandValueClaim
     private $id;
 
     /**
-     * @var string Post code
+     * @var string Department code
      * 
      * @ORM\Column(type="string")
      * 
      * @Assert\NotBlank
-     * @AcmeAssert\Postcode
+     * @AcmeAssert\Depcode
      */
-    public $postCode;
+    public $depCode;
 
     /**
      * @var \DateTimeInterface Mutation date

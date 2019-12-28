@@ -6,12 +6,13 @@ use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
-class PostcodeValidator extends ConstraintValidator {   
+class DepcodeValidator extends ConstraintValidator {
+
     public function validate($value, Constraint $constraint) {
         
         // Testing constraint type
-        if (!$constraint instanceof Postcode) {
-            throw new UnexpectedTypeException($constraint, Postcode::class);
+        if (!$constraint instanceof Depcode) {
+            throw new UnexpectedTypeException($constraint, Depcode::class);
         }
 
         // In the case of a null or empty value, stopping the function.
@@ -25,7 +26,7 @@ class PostcodeValidator extends ConstraintValidator {
             throw new UnexpectedValueException($value, 'string');
         }
 
-        if (!preg_match('/^\d{4,5}$/', $value)) {
+        if (!preg_match('/^\d{2,3}$/', $value)) {
             // building a constraint violation with the given value 
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ string }}', $value)

@@ -81,7 +81,7 @@ class AppFixtures extends Fixture
                     $mutationDate = $data[8] ?: "01/01/".$year;
                     $mutationType = $data[9] ?: "Vente";
                     $value = intval($data[10] ?: "100");
-                    $postCode = $data[16] ?: "0000";
+                    $depCode = $data[18] ?: "00";
                     $surface = intval($data[38] ?: "100.00");
 
                     // Create LandValueClaim object.
@@ -89,7 +89,7 @@ class AppFixtures extends Fixture
                     $lvc->mutationDate = DateTime::createFromFormat('d/m/Y', $mutationDate);
                     $lvc->mutationType = $mutationType;
                     $lvc->value = $value;
-                    $lvc->postCode = $postCode;
+                    $lvc->depCode = $depCode;
                     $lvc->surface = $surface;
 
                     // Insert in PHP cache.
