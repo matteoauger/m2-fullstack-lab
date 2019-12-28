@@ -53,6 +53,15 @@ class LandValueClaim
     public $mutationType;
 
     /**
+     * @var string type
+     * 
+     * @ORM\Column(type="string")
+     * 
+     * @Assert\NotBlank
+     */
+    public $type;
+
+    /**
      * @var int Land value in euros
      * 
      * @ORM\Column(type="float")

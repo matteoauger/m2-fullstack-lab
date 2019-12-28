@@ -82,6 +82,7 @@ class AppFixtures extends Fixture
                     $mutationType = $data[9] ?: "Vente";
                     $value = intval($data[10] ?: "100");
                     $depCode = $data[18] ?: "00";
+                    $type = $data[36] ?: "Maison";
                     $surface = intval($data[38] ?: "100.00");
 
                     // Create LandValueClaim object.
@@ -90,6 +91,7 @@ class AppFixtures extends Fixture
                     $lvc->mutationType = $mutationType;
                     $lvc->value = $value;
                     $lvc->depCode = $depCode;
+                    $lvc->type = $type;
                     $lvc->surface = $surface;
 
                     // Insert in PHP cache.
