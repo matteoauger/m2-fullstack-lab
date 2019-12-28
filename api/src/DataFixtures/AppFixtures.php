@@ -93,7 +93,7 @@ class AppFixtures extends Fixture
                     $value = $data[10];
                     $depCode = $data[18];
                     $type = $data[36];
-                    $surface = $data[38];
+                    $surface = $data[42];
 
                     // Exclude invalid data.
                     if (   $mutationDate == null
