@@ -6,11 +6,43 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Validator\Constraint as AcmeAssert;
+use App\Controller\GetMeanPricesByYear;
 
 /**
  * Land value claim entity
  *
- * @ApiResource
+ * @ApiResource(
+ * collectionOperations={
+ *      "get",
+ *      "post",
+ *      "meanprices"={
+ *         "method"="GET",
+ *         "path"="land_value_claims/meanprices",
+ *         "controller"=GetMeanPricesByYear::class,
+ *         "pagination_enabled"=false,
+ *         "read"= false,
+ *         "openapi_context" = {
+ *              "summary" = "Gets the mean land value claim price for the given year",
+ *              "description" = "Gets the mean land value claim price for the given year",
+ *              "read"="false",
+ *              "parameters" = {
+ *                  {
+ *                      "in" = "content",
+ *                      "name"="year",
+ *                      "required"= true,
+ *                      "description"= "The year to get the mean from",
+ *                      "schema"= {
+ *                          "type"="integer",
+ *                          "format"="int64"
+ *                      },
+ *                      "example" = 2015 
+ *                  } 
+ *               },  
+ *          }
+ *     }
+ * },
+ * itemOperations={"get", "patch", "put", "delete"}
+ * )
  * @ORM\Entity
  */
 class LandValueClaim
@@ -78,8 +110,7 @@ class LandValueClaim
      */
     public $surface;
 
-    public function getId(): int
-    {
+    public function getId(): int {
         return $this->id;
     }
 }
