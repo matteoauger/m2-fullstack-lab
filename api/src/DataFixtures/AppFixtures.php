@@ -55,54 +55,77 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class AppFixtures extends Fixture
 {
+    /**
+     * @see https://static.data.gouv.fr/resources/demandes-de-valeurs-foncieres/20191220-102114/notice-descriptive-du-fichier-dvf.pdf
+     */
     public function load(ObjectManager $manager)
     {
         $batchSize = 100;
         $delimiter = "|";
         $years = [2015, 2016, 2017, 2018, 2019];
         
-        // Deactivate SQLLogger
+        // Deactivate SQLLogger.
         $config = $manager->getConnection()->getConfiguration();
         $logger = $config->getSQLLogger();
         $config->setSQLLogger(null);
 
-        // Load data [2015-2019]
+        // Load data [2015-2019].
         foreach ($years as $year) {
             echo "Year ".$year."... ";
+            
             $start = time();
+            $i = 0;
+            $e = 0;
+
             // Read file
             if (($handle = fopen("data/valeursfoncieres-".$year.".txt", "r")) !== FALSE) {
-                // Ignore first line (header)
+                // Ignore first line. (header)
                 fgetcsv($handle, 1000, $delimiter);
-                // Load each lines
-                $i = 0;
+                // Load each lines.
+                
                 while (($data = fgetcsv($handle, 1000, $delimiter)) !== FALSE) {
+                    /* Partial loading (fast) */ if ($i == 10000) break;
+                    $i++;
+
                     // Format data.
-                    $mutationDate = $data[8] ?: "01/01/".$year;
-                    $mutationType = $data[9] ?: "Vente";
-                    $value = intval($data[10] ?: "100");
-                    $depCode = $data[18] ?: "00";
-                    $type = $data[36] ?: "Maison";
-                    $surface = intval($data[38] ?: "100.00");
+                    $mutationDate = $data[8];
+                    $mutationType = $data[9];
+                    $value = $data[10];
+                    $depCode = $data[18];
+                    $type = $data[36];
+                    $surface = $data[42];
+
+                    // Exclude invalid data.
+                    if (   $mutationDate == null
+                        || $mutationType == null 
+                        || $value == null
+                        || $value == "0"
+                        || $depCode == null
+                        || $type == null
+                        || $surface == null
+                        || $surface == "0"
+                        ) {
+                            $e++;
+                            continue;
+                        }
 
                     // Create LandValueClaim object.
                     $lvc = new LandValueClaim();
                     $lvc->mutationDate = DateTime::createFromFormat('d/m/Y', $mutationDate);
                     $lvc->mutationType = $mutationType;
-                    $lvc->value = $value;
+                    $lvc->value = intval($value);
                     $lvc->depCode = $depCode;
                     $lvc->type = $type;
-                    $lvc->surface = $surface;
+                    $lvc->surface = intval($surface);
 
                     // Insert in PHP cache.
                     $manager->persist($lvc);
+
                     if ($i % $batchSize == 0) {
                         // Send to DB and clear cache.
                         $manager->flush();
                         $manager->clear();
                     }
-                    $i++;
-                    // /* Partial loading (fast) */ if ($i > 1000) break;
                 }
                 // Send to DB and clear cache (last items).
                 $manager->flush();
@@ -110,9 +133,9 @@ class AppFixtures extends Fixture
                 fclose($handle);
             }
             $end = time();
-            echo "(".$i." items(s) loaded in ".($end - $start)."s)\n";
+            echo "(".($i-$e)." items(s) loaded and ".$e." item(s) excluded in ".($end - $start)."s)\n";
         }
-        // Reactivate SQLLogger
+        // Reactivate SQLLogger.
         $config->setSQLLogger($logger);
     }
 }
