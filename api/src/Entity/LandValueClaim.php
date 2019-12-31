@@ -22,15 +22,15 @@ use App\Controller\GetMeanPricesByYear;
  *         "pagination_enabled"=false,
  *         "read"= false,
  *         "openapi_context" = {
- *              "summary" = "Gets the mean land value claim price for the given year",
- *              "description" = "Gets the mean land value claim price for the given year",
+ *              "summary" = "Gets the mean land value claim price for each month  on the given year",
+ *              "description" = "Gets the mean land value claim price for each month on the given year",
  *              "read"="false",
  *              "parameters" = {
  *                  {
- *                      "in" = "content",
+ *                      "in" = "query",
  *                      "name"="year",
  *                      "required"= true,
- *                      "description"= "The year to get the mean from",
+ *                      "description"= "Considered year",
  *                      "schema"= {
  *                          "type"="integer",
  *                          "format"="int64"
