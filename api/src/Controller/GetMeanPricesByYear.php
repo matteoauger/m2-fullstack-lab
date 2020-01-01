@@ -21,34 +21,25 @@ class GetMeanPricesByYear {
         $this->em = $em;
     }
 
-    public function __invoke(Request $data) { 
+    public function __invoke(Request $data) {
         $year = $data->query->get('year');
         
         // base dql query selecting the prices and surfaces from the LVCs of the given year 
-        $base_query  = "SELECT c.value, c.surface ";
-        $base_query .= "FROM App:LandValueClaim c "; 
-        $base_query .= "WHERE (c.type LIKE 'Appartement' OR c.type LIKE 'Maison') ";
-        $base_query .= "AND EXTRACT(year FROM c.mutationDate) = ". $year . " ";
+        $query  = "SELECT ";
+        $query .= "EXTRACT(month FROM c.mutationDate) AS m, ";
+        $query .= "AVG(c.value/c.surface) AS price_per_meter ";
+        $query .= "FROM App:LandValueClaim c "; 
+        $query .= "WHERE (c.type LIKE 'Appartement' OR c.type LIKE 'Maison') ";
+        $query .= "AND EXTRACT(year FROM c.mutationDate) = ".$year. " ";
+        $query .= "GROUP BY m";
+
+        $results = $this->em
+                ->createQuery($query)
+                ->getResult();
 
         $mean_by_month = [];
-
-        // Here we are going to calculate the average for each month of the given date
-        // So we're starting from January (1)
-        for ($month = 1; $month <= 12; $month++) {
-            $query_month = $base_query . "AND EXTRACT(month FROM c.mutationDate) =  " . $month;
-
-            $results = $this->em
-                ->createQuery($query_month)
-                ->getResult();
-            if (count($results) > 0) {
-                $sum = 0;
-                for($i = 0; $i < count($results); $i++) {
-                    $sum += $results[$i]['value'] / $results[$i]['surface'];  
-                }
-    
-                $mean = $sum / count($results);
-                $mean_by_month[$month] = $mean;
-            }
+        for ($i = 0; $i < count($results); $i++) {
+            $mean_by_month[$results[$i]['m']] = $results[$i]['price_per_meter'];
         }
 
         $res = new Response(
