@@ -5,8 +5,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
-class GetMeanPricesByYear {
-
+class GetMeanPricesByYear 
+{
     /**
      * Entity Manager 
      */
@@ -15,11 +15,13 @@ class GetMeanPricesByYear {
     /**
      * Creates a new instance of GetMeanPricesByYear
      */
-    public function __construct(EntityManagerInterface $em) {
+    public function __construct(EntityManagerInterface $em) 
+    {
         $this->em = $em;
     }
 
-    public function __invoke(Request $data) {
+    public function __invoke(Request $data) 
+    {
         // Prepares the request for the average price per square metre per month for each year. 
         $request = "SELECT
                         DATE_PART('year', c.mutationDate) AS y,
