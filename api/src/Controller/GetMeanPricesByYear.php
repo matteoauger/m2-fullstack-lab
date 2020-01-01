@@ -3,8 +3,6 @@ namespace App\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use App\Entity\LandValueClaim;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 class GetMeanPricesByYear {
@@ -24,11 +22,11 @@ class GetMeanPricesByYear {
     public function __invoke(Request $data) {
         // Prepares the request for the average price per square metre per month for each year. 
         $request = "SELECT
-                        EXTRACT(year FROM c.mutationDate) AS y,
-                        EXTRACT(month FROM c.mutationDate) AS m,
+                        DATE_PART('year', c.mutationDate) AS y,
+                        DATE_PART('month', c.mutationDate) AS m,
                         AVG(c.value / c.surface) AS mean
                     FROM App:LandValueClaim c
-                    WHERE (c.type LIKE 'Appartement' OR c.type LIKE 'Maison')
+                    WHERE c.type LIKE 'Appartement' OR c.type LIKE 'Maison'
                     GROUP BY y, m";
 
         // Execute query.
@@ -38,12 +36,14 @@ class GetMeanPricesByYear {
 
         // Format result.
         $result = [];
-        for ($i = 0; $i < count($query_result); $i++) {
-            $year = $query_result[$i]['y'];
+        foreach ($query_result as $data) {
+            $year = $data['y'];
+            $month = $data['m'];
+            $mean = $data['mean'];
             if (!isset($result[$year])) {
                 $result[$year] = [];
             }
-            $result[$year][$query_result[$i]['m']] = $query_result[$i]['mean'];
+            $result[$year][$month] = $mean;
         }
 
         // Build response.

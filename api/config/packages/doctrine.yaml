@@ -19,4 +19,4 @@ doctrine:
                 alias: App
         dql:
             datetime_functions: 
-                EXTRACT: DoctrineExtensions\Query\Postgresql\ExtractFunction
+                date_part: DoctrineExtensions\Query\Postgresql\DatePart
