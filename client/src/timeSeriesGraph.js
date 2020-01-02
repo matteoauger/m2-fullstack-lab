@@ -19,11 +19,11 @@ class timeSeriesGraph extends React.Component {
 
       // Create scale
       var x_scale = d3.scaleLinear()
-        .domain([d3.min(data), d3.max(data)])
+        .domain([0, data.length])
         .range([0, width - 100]);
 
       var y_scale = d3.scaleLinear()
-        .domain([d3.min(data), d3.max(data)])
+        .domain([0, d3.max(data)])
         .range([(height/2), 0]);
               
       // Add scales to axis
@@ -41,6 +41,26 @@ class timeSeriesGraph extends React.Component {
       svg.append("g")
         .attr("transform", "translate(50, " + (height/2 + 10)+ ")")
         .call(x_axis)
+
+      var lineGenerator = d3.line();
+
+      var points = [
+        [0, 80],
+        [100, 100],
+        [200, 30],
+        [300, 50],
+        [400, 40],
+        [500, 80]
+      ];
+
+      data.forEach(function(element, index) {
+        points[index] = [index*100, height/2 - ((height/(2*d3.max(data)))*element)];
+      });
+
+      var pathData = lineGenerator(points);
+
+      d3.select('path')
+        .attr('d', pathData);
     }
           
     render(){
