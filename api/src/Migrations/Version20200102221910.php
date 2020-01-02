@@ -10,11 +10,11 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200102204524 extends AbstractMigration
+final class Version20200102221910 extends AbstractMigration
 {
     public function getDescription() : string
     {
-        return 'State insee code';
+        return 'Department table';
     }
 
     public function up(Schema $schema) : void
@@ -22,8 +22,10 @@ final class Version20200102204524 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('DROP INDEX uniq_a393d2fb5e237e06');
-        $this->addSql('ALTER TABLE state ADD insee INT NOT NULL');
+        $this->addSql('CREATE SEQUENCE department_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE TABLE department (id INT NOT NULL, insee VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, state_insee INT NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_CD1DE18AFA1CBE2D ON department (insee)');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_A393D2FBFA1CBE2D ON state (insee)');
     }
 
     public function down(Schema $schema) : void
@@ -31,7 +33,8 @@ final class Version20200102204524 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('ALTER TABLE state DROP insee');
-        $this->addSql('CREATE UNIQUE INDEX uniq_a393d2fb5e237e06 ON state (name)');
+        $this->addSql('DROP SEQUENCE department_id_seq CASCADE');
+        $this->addSql('DROP TABLE department');
+        $this->addSql('DROP INDEX UNIQ_A393D2FBFA1CBE2D');
     }
 }
