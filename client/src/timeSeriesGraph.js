@@ -7,9 +7,28 @@ class timeSeriesGraph extends React.Component {
     }
       
     drawChart() {
-      const data = [12, 5, 6, 6, 9, 10];
-      const width = 500;
-      const height = 500;
+      //const data = [12, 5, 6, 6, 9, 10];
+      const data = {
+        2015: [
+          10, 10, 10, 10, 10, 10, 10, 10, 10, 19, 20, 21
+        ],
+        2016: [
+          10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21
+        ],
+        2017: [
+          10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21
+        ],
+        2018: [
+          10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21
+        ],
+        2019: [
+          10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21
+        ]
+      }
+      
+      const width = 1000;
+      const height = 1000;
+      const numberElements = 60
       
       const svg = d3.select("body")
         .append("svg")
@@ -19,11 +38,12 @@ class timeSeriesGraph extends React.Component {
 
       // Create scale
       var x_scale = d3.scaleLinear()
-        .domain([0, data.length])
+        .domain([2015, 2020])
         .range([0, width - 100]);
 
+      var highestY = 25;
       var y_scale = d3.scaleLinear()
-        .domain([0, d3.max(data)])
+        .domain([0, highestY])
         .range([(height/2), 0]);
               
       // Add scales to axis
@@ -44,27 +64,30 @@ class timeSeriesGraph extends React.Component {
 
       var lineGenerator = d3.line();
 
-      var points = [
-        [0, 80],
-        [100, 100],
-        [200, 30],
-        [300, 50],
-        [400, 40],
-        [500, 80]
-      ];
+      var points = [];
 
-      data.forEach(function(element, index) {
-        points[index] = [index*100, height/2 - ((height/(2*d3.max(data)))*element)];
-      });
+
+      var cpt = 0;
+      for (let [key, value] of Object.entries(data)) {
+        value.forEach(function(element, index) {
+          points[cpt++] = [cpt*((width-100)/numberElements), height/2 - ((height/(2*highestY))*element)];
+        });
+      }
 
       var pathData = lineGenerator(points);
 
       d3.select('path')
-        .attr('d', pathData);
+        .attr('d', pathData)
+        .style("stroke", "#0297db");
     }
           
     render(){
-      return <div id={"#" + this.props.id}></div>
+      return (
+        <div>
+          <h1>Prix moyen du m2</h1>
+          <div id={"#" + this.props.id}></div>
+        </div>
+      )
     }
   }
       
