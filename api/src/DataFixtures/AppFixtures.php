@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\LandValueClaim;
+use App\Entity\State;
 use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -69,7 +70,31 @@ class AppFixtures extends Fixture
         $logger = $config->getSQLLogger();
         $config->setSQLLogger(null);
 
-        // Load data [2015-2019].
+        // Load State data
+        if (($handle = fopen("data/regions.txt", "r")) !== FALSE) {
+            echo 'Loading states'.PHP_EOL;
+
+            // Ignore first line. (header)
+            fgetcsv($handle, 1000, $delimiter);
+
+            while (($data = fgetcsv($handle, 1000, $delimiter)) !== FALSE) {
+                $inseeCode = $data[0];
+                $name = $data[1];
+
+                $state = new State();
+                $state->insee = $inseeCode;
+                $state->name = $name;
+
+                $manager->persist($state);
+            }
+
+            $manager->flush();
+            $manager->clear();
+        } else {
+            throw new Exception("Could not read data/regions.txt");
+        }
+
+        // Load LandValueClaim data [2015-2019].
         foreach ($years as $year) {
             echo "Year ".$year."... ";
             
