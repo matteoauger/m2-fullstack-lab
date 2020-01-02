@@ -69,7 +69,7 @@ class AppFixtures extends Fixture
                 $name = $data[1];
 
                 $state = new State();
-                $state->insee = $inseeCode;
+                $state->id = $inseeCode;
                 $state->name = $name;
 
                 $manager->persist($state);
@@ -94,7 +94,7 @@ class AppFixtures extends Fixture
                 $stateInsee = $data[2];
 
                 $department = new Department();
-                $department->insee = $inseeCode;
+                $department->id = $inseeCode;
                 $department->name = $name;
                 $department->stateInsee = $stateInsee;
 
