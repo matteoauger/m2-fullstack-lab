@@ -14,13 +14,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 class State {
 
     /**
-     * @var int The entity Id
-     *
+     * @var int INSEE code, id of the entity
+     * 
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", unique=true)
      */
-    private $id;
+    public $id;
 
     /**
      * @var string Name
@@ -29,12 +28,6 @@ class State {
      */
     public $name;
 
-    /**
-     * @var int INSEE code
-     * 
-     * @ORM\Column(type="integer", unique=true)
-     */
-    public $insee;
 
     public function getId() {
         return $this->id;

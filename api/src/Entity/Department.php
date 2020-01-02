@@ -11,27 +11,18 @@ use Doctrine\ORM\Mapping\JoinColumn;
 /**
  * @ORM\Entity
  * @ApiResource
- * 
- * @UniqueEntity(fields="$insee", message="This department already exists.")
+ * @UniqueEntity(fields="id", message="This department already exists.")
  */
 class Department {
     /**
-     * @var int The entity Id
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
-    /**
-     * @var string Department INSEE code
+     * @var string INSEE code, id of the entity 
      * 
+     * @ORM\Id
      * @ORM\Column(type="string", unique=true)
      * @Assert\NotBlank
      * @AcmeAssert\DepCode
      */
-    public $insee;
+    public $id;
 
     /**
      * @var string name
@@ -46,7 +37,7 @@ class Department {
      * 
      * @ORM\Column(type="integer")
      * @ORM\ManyToOne(targetEntity="State")
-     * @JoinColumn(name="state_id", referencedColumnName="insee")
+     * @JoinColumn(name="state_id", referencedColumnName="id")
      */
     public $stateInsee;
 
