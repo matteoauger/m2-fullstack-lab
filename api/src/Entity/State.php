@@ -32,7 +32,7 @@ class State {
     /**
      * @var int INSEE code
      * 
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", unique=true)
      */
     public $insee;
 
