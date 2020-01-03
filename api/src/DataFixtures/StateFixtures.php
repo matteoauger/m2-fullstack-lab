@@ -24,11 +24,4 @@ class StateFixtures extends CSVFixture
 
         $manager->persist($state);
     }
-
-    public function getDependencies()
-    {
-        return array(
-            DepartmentFixtures::class,
-        );
-    }
 }

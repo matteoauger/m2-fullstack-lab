@@ -3,10 +3,12 @@
 namespace App\DataFixtures;
 
 use App\DataFixtures\ORM\CSVFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use App\Entity\Department;
+use App\Entity\State;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class DepartmentFixtures extends CSVFixture
+class DepartmentFixtures extends CSVFixture implements DependentFixtureInterface
 {
     function __construct()
     {
@@ -22,8 +24,16 @@ class DepartmentFixtures extends CSVFixture
         $department = new Department();
         $department->id = $inseeCode;
         $department->name = $name;
-        $department->stateInsee = $stateInsee;
+        $department->state = $manager->getReference(State::class, $stateInsee);
 
         $manager->persist($department);
+    }
+
+
+    public function getDependencies()
+    {
+        return array(
+            StateFixtures::class,
+        );
     }
 }

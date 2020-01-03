@@ -4,8 +4,10 @@ namespace App\DataFixtures;
 
 use App\DataFixtures\ORM\CSVFixture;
 use App\Entity\LandValueClaim;
+use App\Entity\Department;
 use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 /*
  * [0] => Code service CH
@@ -52,7 +54,7 @@ use Doctrine\Common\Persistence\ObjectManager;
  * [41] => Nature culture speciale
  * [42] => Surface terrain
  */
-class LVCFixtures extends CSVFixture
+class LVCFixtures extends CSVFixture implements DependentFixtureInterface
 {
     public function __construct()
     {
@@ -96,7 +98,8 @@ class LVCFixtures extends CSVFixture
         $lvc->mutationDate = DateTime::createFromFormat('d/m/Y', $mutationDate);
         $lvc->mutationType = $mutationType;
         $lvc->value = intval($value);
-        $lvc->depCode = $depCode;
+        $lvc->dep_code = $depCode;
+        $lvc->department = $manager->getReference(Department::class, $depCode);
         $lvc->type = $type;
         $lvc->surface = intval($surface);
 
