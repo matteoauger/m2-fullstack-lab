@@ -35,27 +35,8 @@ class GetMeanPricesByYear
         $query_result = $this->em
                 ->createQuery($request)
                 ->getResult();
-
-        // Format result.
-        $result = [];
-        foreach ($query_result as $data) {
-            $year = $data['y'];
-            $month = $data['m'];
-            $mean = $data['mean'];
-            if (!isset($result[$year])) {
-                $result[$year] = [];
-            }
-            $result[$year][$month] = $mean;
-        }
-
-        // Build response.
-        $res = new Response(
-            json_encode($result), 
-            Response::HTTP_OK,
-            ['content-type' => 'application/json']
-        );
-
-        return $res;
+        
+        return $query_result;
     }
 }
 ?>
