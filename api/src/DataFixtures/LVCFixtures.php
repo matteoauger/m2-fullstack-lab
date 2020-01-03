@@ -2,9 +2,9 @@
 
 namespace App\DataFixtures;
 
+use App\DataFixtures\ORM\CSVFixture;
 use App\Entity\LandValueClaim;
 use DateTime;
-use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /*
@@ -59,9 +59,10 @@ class LVCFixtures extends CSVFixture
         parent::__construct(self::getFiles(), "|", 1000, 100, 1000);   
     }
 
-    private function getFiles() {
+    private function getFiles() 
+    {
         return array_map(function($year) {
-            return "data/valeursfoncieres-".$year.".txt";
+            return "data/valeursfoncieres-$year.txt";
         }, [2015, 2016, 2017, 2018, 2019]);
     }
 

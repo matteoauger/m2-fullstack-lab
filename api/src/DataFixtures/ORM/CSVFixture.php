@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DataFixtures;
+namespace App\DataFixtures\ORM;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -28,18 +28,17 @@ abstract class CSVFixture extends Fixture
         $logger = $config->getSQLLogger();
         $config->setSQLLogger(null);
 
-        foreach (self::$filenames as $filename) { 
+        foreach ($this->filenames as $filename) { 
             // Load data
-            if (($handle = fopen($filename, "r")) !== FALSE) {
+            if (($handle = @fopen($filename, "r")) !== FALSE) {
                 // Ignore first line. (header)
-                fgetcsv($handle, self::$lineSize, self::$delimiter);
+                fgetcsv($handle, $this->lineSize, $this->delimiter);
 
                 $index = 0;
-                while (($data = fgetcsv($handle, self::$lineSize, self::$delimiter)) !== FALSE) {
-                    if ($index > self::$limit) break;
+                while ($index < $this->limit && ($data = @fgetcsv($handle, $this->lineSize, $this->delimiter)) !== FALSE) {
                     $this->loadFromCSV($manager, $data, $index);
                     $index++;
-                    if ($index % self::$batchSize == 0) {
+                    if ($index % $this->batchSize == 0) {
                         // Send to DB and clear cache.
                         $manager->flush();
                         $manager->clear();

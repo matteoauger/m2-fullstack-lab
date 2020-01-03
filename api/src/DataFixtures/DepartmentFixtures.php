@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\DataFixtures\ORM\CSVFixture;
 use App\Entity\Department;
 use Doctrine\Common\Persistence\ObjectManager;
 
