@@ -37,8 +37,8 @@ use App\Entity\Department;
  *         "pagination_enabled"=false,
  *         "read"= false,
  *         "openapi_context" = {
- *              "summary" = "Gets the mean land value claim price for each month for each year",
- *              "description" = "Gets the mean land value claim price for each month for each year",
+ *              "summary" = "Gets the sales repartition by state.",
+ *              "description" = "Gets the sales repartition by state",
  *              "read"="false",
  *              "parameters"= {
  *                  {
@@ -48,8 +48,8 @@ use App\Entity\Department;
  *                      "schema"= {
  *                          "type"="integer",
  *                          "format"="int64"
- *                      
- *                      }                 
+ *                      },
+ *                      "example"= 2015                 
  *                  }             
  *              }
  *          }
