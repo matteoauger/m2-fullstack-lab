@@ -33,7 +33,8 @@ class GetSalesByInterval
                     WHERE 
                         c.mutationType LIKE 'Vente' AND 
                         c.mutationDate BETWEEN '$date_start' AND '$date_end'
-                    GROUP BY current_date";
+                    GROUP BY current_date
+                    ORDER BY current_date";
 
         // Execute query.
         $query_result = $this->em

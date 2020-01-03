@@ -27,7 +27,8 @@ class GetMeanPricesByYear
                         AVG(c.value / c.surface) AS mean
                     FROM App:LandValueClaim c
                     WHERE c.type LIKE 'Appartement' OR c.type LIKE 'Maison'
-                    GROUP BY current_date";
+                    GROUP BY current_date
+                    ORDER BY current_date";
 
         // Execute query.
         $query_result = $this->em
