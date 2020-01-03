@@ -72,6 +72,7 @@ use App\Validator\Constraint as AcmeAssert;
  * itemOperations={"get", "patch", "put", "delete"}
  * )
  * @ORM\Entity
+ * @ORM\Table(name="land_value_claim",indexes={@ORM\Index(name="mutation_idx", columns={"mutationDate", "mutationType"})})
  */
 class LandValueClaim
 {
@@ -97,7 +98,7 @@ class LandValueClaim
     /**
      * @var \DateTimeInterface Mutation date
      * 
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="date")
      * 
      * @Assert\NotBlank
      */
