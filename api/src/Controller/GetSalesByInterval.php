@@ -4,7 +4,7 @@ namespace App\Controller;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class GetMeanPricesByYear 
+class GetSalesByInterval
 {
     /**
      * Entity Manager 
@@ -12,7 +12,7 @@ class GetMeanPricesByYear
     private $em;
 
     /**
-     * Creates a new instance of GetMeanPricesByYear
+     * Creates a new instance of GetSalesByInterval
      */
     public function __construct(EntityManagerInterface $em) 
     {
@@ -21,12 +21,18 @@ class GetMeanPricesByYear
 
     public function __invoke(Request $data) 
     {
-        // Prepares the request for the average price per square metre per month for each year. 
+        $interval = $data->query->get('interval');
+        $date_start = $data->query->get('date_start');
+        $date_end = $data->query->get('date_end');
+
+        // Prepares the request. 
         $request = "SELECT
-                        DATE_TRUNC('month', c.mutationDate) AS current_date,
-                        AVG(c.value / c.surface) AS mean
+                        DATE_TRUNC('$interval', c.mutationDate) AS current_date,
+                        COUNT(c.mutationType) AS sales_count
                     FROM App:LandValueClaim c
-                    WHERE c.type LIKE 'Appartement' OR c.type LIKE 'Maison'
+                    WHERE 
+                        c.mutationType LIKE 'Vente' AND 
+                        c.mutationDate BETWEEN '$date_start' AND '$date_end'
                     GROUP BY current_date
                     ORDER BY current_date";
 
@@ -34,7 +40,7 @@ class GetMeanPricesByYear
         $query_result = $this->em
                 ->createQuery($request)
                 ->getResult();
-        
+                
         return $query_result;
     }
 }
