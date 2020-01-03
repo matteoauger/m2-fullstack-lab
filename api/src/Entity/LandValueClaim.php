@@ -6,7 +6,6 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Validator\Constraint as AcmeAssert;
-use App\Controller\GetMeanPricesByYear;
 
 /**
  * Land value claim entity
@@ -18,15 +17,57 @@ use App\Controller\GetMeanPricesByYear;
  *      "meanprices"={
  *         "method"="GET",
  *         "path"="land_value_claims/meanprices",
- *         "controller"=GetMeanPricesByYear::class,
+ *         "controller"=App\Controller\GetMeanPricesByYear::class,
  *         "pagination_enabled"=false,
  *         "read"= false,
- *         "openapi_context" = {
- *              "summary" = "Gets the mean land value claim price for each month for each year",
- *              "description" = "Gets the mean land value claim price for each month for each year",
+ *         "openapi_context"={
+ *              "summary"="Gets the mean land value claim price for each month for each year",
+ *              "description"="Gets the mean land value claim price for each month for each year",
  *              "read"="false"
  *          }
- *     }
+ *      },
+ *      "salesbyinterval"={
+ *          "method"="GET",
+ *          "path"="land_value_claims/salesbyinterval",
+ *          "controller"=App\Controller\GetSalesByInterval::class,
+ *          "pagination_enabled"=false,
+ *          "read"=false,
+ *          "openapi_context"={
+ *              "read"=false,
+ *              "parameters"={
+ *                  {
+ *                      "in"="query",
+ *                      "name"="interval",
+ *                      "required"= true,
+ *                      "schema"= {
+ *                          "type"="string",
+ *                          "enum"={"day","month","year"}
+ *                      },
+ *                      "example"="day"
+ *                  },
+ *                  {
+ *                      "in"="query",
+ *                      "name"="date_start",
+ *                      "required"= true,
+ *                      "schema"= {
+ *                          "type"="string",
+ *                          "format"="full-date"
+ *                      },
+ *                      "example"="2015-01-01"
+ *                  },
+ *                  {
+ *                      "in"="query",
+ *                      "name"="date_end",
+ *                      "required"= true,
+ *                      "schema"= {
+ *                          "type"="string",
+ *                          "format"="full-date"
+ *                      },
+ *                      "example"="2019-12-31"
+ *                  }
+ *              }
+ *          }
+ *      }
  * },
  * itemOperations={"get", "patch", "put", "delete"}
  * )
