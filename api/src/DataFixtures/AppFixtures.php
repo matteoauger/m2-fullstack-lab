@@ -3,6 +3,8 @@
 namespace App\DataFixtures;
 
 use App\Entity\LandValueClaim;
+use App\Entity\State;
+use App\Entity\Department;
 use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -55,6 +57,61 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class AppFixtures extends Fixture
 {
+
+    private function loadStates(ObjectManager $manager, string $delimiter) {
+        // Load State data
+        if (($handle = fopen("data/regions.txt", "r")) !== FALSE) {
+            // Ignore first line. (header)
+            fgetcsv($handle, 1000, $delimiter);
+
+            while (($data = fgetcsv($handle, 1000, $delimiter)) !== FALSE) {
+                $inseeCode = $data[0];
+                $name = $data[1];
+
+                $state = new State();
+                $state->id = $inseeCode;
+                $state->name = $name;
+
+                $manager->persist($state);
+            }
+
+            $manager->flush();
+            $manager->clear();
+        } else {
+            throw new Exception("Could not read data/regions.txt");
+        }
+    }
+
+    private function loadDepartments(ObjectManager $manager, string $delimiter) {
+        // Load State data
+        if (($handle = fopen("data/departments.txt", "r")) !== FALSE) {
+            // Ignore first line. (header)
+            fgetcsv($handle, 1000, $delimiter);
+
+            while (($data = fgetcsv($handle, 1000, $delimiter)) !== FALSE) {
+                $inseeCode = $data[0];
+                $name = $data[1];
+                $stateInsee = $data[2];
+
+                $department = new Department();
+                $department->id = $inseeCode;
+                $department->name = $name;
+                $department->stateInsee = $stateInsee;
+
+                $manager->persist($department);
+            }
+
+            $manager->flush();
+            $manager->clear();
+        } else {
+            throw new Exception("Could not read data/departments.txt");
+        }
+    }
+
+    private function loadLandValueClaims(ObjectManager $manager, string $delimiter) {
+
+    }
+
     /**
      * @see https://static.data.gouv.fr/resources/demandes-de-valeurs-foncieres/20191220-102114/notice-descriptive-du-fichier-dvf.pdf
      */
@@ -69,7 +126,16 @@ class AppFixtures extends Fixture
         $logger = $config->getSQLLogger();
         $config->setSQLLogger(null);
 
-        // Load data [2015-2019].
+        // Load State data
+        echo "Loading states\n";
+        $this->loadStates($manager, $delimiter);
+
+        // Load Department data
+        echo "Loading departments\n";
+        $this->loadDepartments($manager, $delimiter);
+
+        // Load LandValueClaim data [2015-2019].
+        echo "Loading LandValueClaims\n";
         foreach ($years as $year) {
             echo "Year ".$year."... ";
             
