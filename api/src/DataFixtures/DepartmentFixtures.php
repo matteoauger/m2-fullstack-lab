@@ -3,42 +3,26 @@
 namespace App\DataFixtures;
 
 use App\Entity\Department;
-use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class LVCFixtures extends Fixture
+class DepartmentFixtures extends CSVFixture
 {
-    public function load(ObjectManager $manager) 
+    function __construct()
     {
-        // Deactivate SQLLogger.
-        $config = $manager->getConnection()->getConfiguration();
-        $logger = $config->getSQLLogger();
-        $config->setSQLLogger(null);
+        parent::__construct(array("data/departments.txt"));
+    }
 
-        $delimiter = "|";
-        // Load State data
-        if (($handle = fopen("data/departments.txt", "r")) !== FALSE) {
-            // Ignore first line. (header)
-            fgetcsv($handle, 1000, $delimiter);
+    public function loadFromCSV(ObjectManager $manager, $data, $index)
+    {
+        $inseeCode = $data[0];
+        $name = $data[1];
+        $stateInsee = $data[2];
 
-            while (($data = fgetcsv($handle, 1000, $delimiter)) !== FALSE) {
-                $inseeCode = $data[0];
-                $name = $data[1];
-                $stateInsee = $data[2];
+        $department = new Department();
+        $department->id = $inseeCode;
+        $department->name = $name;
+        $department->stateInsee = $stateInsee;
 
-                $department = new Department();
-                $department->id = $inseeCode;
-                $department->name = $name;
-                $department->stateInsee = $stateInsee;
-
-                $manager->persist($department);
-            }
-
-            $manager->flush();
-            $manager->clear();
-        }
-
-        // Reactivate SQLLogger.
-        $config->setSQLLogger($logger);
+        $manager->persist($department);
     }
 }

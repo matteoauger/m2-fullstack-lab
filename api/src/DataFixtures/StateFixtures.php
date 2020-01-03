@@ -2,45 +2,32 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\LandValueClaim;
 use App\Entity\State;
-use App\Entity\Department;
-use DateTime;
-use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class StateFixtures extends Fixture
+class StateFixtures extends CSVFixture
 {
-    public function load(ObjectManager $manager)
+    public function __construct()
     {
+        parent::__construct("data/regions.txt");        
+    }
 
-        // Deactivate SQLLogger.
-        $config = $manager->getConnection()->getConfiguration();
-        $logger = $config->getSQLLogger();
-        $config->setSQLLogger(null);
+    public function loadFromCSV(ObjectManager $manager, $data, $index)
+    {
+        $inseeCode = $data[0];
+        $name = $data[1];
 
-        $delimiter = "|";
-        // Load State data
-        if (($handle = fopen("data/regions.txt", "r")) !== FALSE) {
-            // Ignore first line. (header)
-            fgetcsv($handle, 1000, $delimiter);
+        $state = new State();
+        $state->id = $inseeCode;
+        $state->name = $name;
 
-            while (($data = fgetcsv($handle, 1000, $delimiter)) !== FALSE) {
-                $inseeCode = $data[0];
-                $name = $data[1];
+        $manager->persist($state);
+    }
 
-                $state = new State();
-                $state->id = $inseeCode;
-                $state->name = $name;
-
-                $manager->persist($state);
-            }
-
-            $manager->flush();
-            $manager->clear();
-        }
-
-        // Reactivate SQLLogger.
-        $config->setSQLLogger($logger);
+    public function getDependencies()
+    {
+        return array(
+            DepartmentFixtures::class,
+        );
     }
 }

@@ -52,91 +52,61 @@ use Doctrine\Common\Persistence\ObjectManager;
  * [41] => Nature culture speciale
  * [42] => Surface terrain
  */
-
-class LVCFixtures extends Fixture
+class LVCFixtures extends CSVFixture
 {
+    public function __construct()
+    {
+        parent::__construct(self::getFiles(), "|", 1000, 100, 1000);   
+    }
+
+    private function getFiles() {
+        return array_map(function($year) {
+            return "data/valeursfoncieres-".$year.".txt";
+        }, [2015, 2016, 2017, 2018, 2019]);
+    }
+
     /**
      * @see https://static.data.gouv.fr/resources/demandes-de-valeurs-foncieres/20191220-102114/notice-descriptive-du-fichier-dvf.pdf
      */
-    public function load(ObjectManager $manager)
+    public function loadFromCSV(ObjectManager $manager, $data, $index)
     {
-        $batchSize = 100;
-        $delimiter = "|";
-        $years = [2015, 2016, 2017, 2018, 2019];
-        
-        // Deactivate SQLLogger.
-        $config = $manager->getConnection()->getConfiguration();
-        $logger = $config->getSQLLogger();
-        $config->setSQLLogger(null);
+        $mutationDate = $data[8];
+        $mutationType = $data[9];
+        $value = $data[10];
+        $depCode = $data[18];
+        $type = $data[36];
+        $surface = $data[42];
 
-        // Load LandValueClaim data [2015-2019].
-        echo "Loading LandValueClaims\n";
-        foreach ($years as $year) {
-            echo "Year ".$year."... ";
-            
-            $start = time();
-            $i = 0;
-            $e = 0;
-
-            // Read file
-            if (($handle = fopen("data/valeursfoncieres-".$year.".txt", "r")) !== FALSE) {
-                // Ignore first line. (header)
-                fgetcsv($handle, 1000, $delimiter);
-                // Load each lines.
-                
-                while (($data = fgetcsv($handle, 1000, $delimiter)) !== FALSE) {
-                    /* Partial loading (fast) */ if ($i == 10000) break;
-                    $i++;
-
-                    // Format data.
-                    $mutationDate = $data[8];
-                    $mutationType = $data[9];
-                    $value = $data[10];
-                    $depCode = $data[18];
-                    $type = $data[36];
-                    $surface = $data[42];
-
-                    // Exclude invalid data.
-                    if (   $mutationDate == null
-                        || $mutationType == null 
-                        || $value == null
-                        || $value == "0"
-                        || $depCode == null
-                        || $type == null
-                        || $surface == null
-                        || $surface == "0"
-                        ) {
-                            $e++;
-                            continue;
-                        }
-
-                    // Create LandValueClaim object.
-                    $lvc = new LandValueClaim();
-                    $lvc->mutationDate = DateTime::createFromFormat('d/m/Y', $mutationDate);
-                    $lvc->mutationType = $mutationType;
-                    $lvc->value = intval($value);
-                    $lvc->depCode = $depCode;
-                    $lvc->type = $type;
-                    $lvc->surface = intval($surface);
-
-                    // Insert in PHP cache.
-                    $manager->persist($lvc);
-
-                    if ($i % $batchSize == 0) {
-                        // Send to DB and clear cache.
-                        $manager->flush();
-                        $manager->clear();
-                    }
-                }
-                // Send to DB and clear cache (last items).
-                $manager->flush();
-                $manager->clear();
-                fclose($handle);
+        // Exclude invalid data.
+        if (   $mutationDate == null
+            || $mutationType == null 
+            || $value == null
+            || $value == "0"
+            || $depCode == null
+            || $type == null
+            || $surface == null
+            || $surface == "0"
+            ) {
+                return;
             }
-            $end = time();
-            echo "(".($i-$e)." items(s) loaded and ".$e." item(s) excluded in ".($end - $start)."s)\n";
-        }
-        // Reactivate SQLLogger.
-        $config->setSQLLogger($logger);
+
+        // Create LandValueClaim object.
+        $lvc = new LandValueClaim();
+        $lvc->mutationDate = DateTime::createFromFormat('d/m/Y', $mutationDate);
+        $lvc->mutationType = $mutationType;
+        $lvc->value = intval($value);
+        $lvc->depCode = $depCode;
+        $lvc->type = $type;
+        $lvc->surface = intval($surface);
+
+        // Insert in PHP cache.
+        $manager->persist($lvc);
+    }
+
+    public function getDependencies()
+    {
+        return array(
+            DepartmentFixtures::class,
+        );
     }
 }
