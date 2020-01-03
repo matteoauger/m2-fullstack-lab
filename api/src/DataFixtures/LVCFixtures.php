@@ -55,7 +55,7 @@ use Doctrine\Common\Persistence\ObjectManager;
  * [42] => Surface terrain
  */
 
-class AppFixtures extends Fixture
+class LVCFixtures extends Fixture
 {
 
     private function loadStates(ObjectManager $manager, string $delimiter) {
