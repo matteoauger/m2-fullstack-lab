@@ -7,6 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Validator\Constraint as AcmeAssert;
 use App\Controller\GetMeanPricesByYear;
+use App\Controller\GetSalesRepartition;
+use Doctrine\ORM\Mapping\JoinColumn;
+use App\Entity\Department;
 
 /**
  * Land value claim entity
@@ -26,6 +29,30 @@ use App\Controller\GetMeanPricesByYear;
  *              "description" = "Gets the mean land value claim price for each month for each year",
  *              "read"="false"
  *          }
+ *     },
+ *     "sales_repartition"={
+ *         "method"="GET",
+ *         "path"="land_value_claims/salesrepartition",
+ *         "controller"=GetSalesRepartition::class,
+ *         "pagination_enabled"=false,
+ *         "read"= false,
+ *         "openapi_context" = {
+ *              "summary" = "Gets the mean land value claim price for each month for each year",
+ *              "description" = "Gets the mean land value claim price for each month for each year",
+ *              "read"="false",
+ *              "parameters"= {
+ *                  {
+ *                      "in" = "query",
+ *                      "name" = "year",
+ *                      "required"=true,
+ *                      "schema"= {
+ *                          "type"="integer",
+ *                          "format"="int64"
+ *                      
+ *                      }                 
+ *                  }             
+ *              }
+ *          }
  *     }
  * },
  * itemOperations={"get", "patch", "put", "delete"}
@@ -44,14 +71,11 @@ class LandValueClaim
     private $id;
 
     /**
-     * @var string Department code
-     * 
-     * @ORM\Column(type="string")
-     * 
-     * @Assert\NotBlank
-     * @AcmeAssert\Depcode
+     * @var Department department
+     * @ORM\ManyToOne(targetEntity="Department")
+     * @JoinColumn(name="dep_code", referencedColumnName="id")
      */
-    public $depCode;
+    public $department;
 
     /**
      * @var \DateTimeInterface Mutation date
