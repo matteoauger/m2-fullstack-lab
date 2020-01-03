@@ -32,14 +32,12 @@ class Department {
      */
     public $name;
 
-    /**
-     * @var int state insee code
-     * 
-     * @ORM\Column(type="integer")
+    /** 
+     * State
      * @ORM\ManyToOne(targetEntity="State")
-     * @JoinColumn(name="state_id", referencedColumnName="id")
+     * @JoinColumn(name="state_insee", referencedColumnName="id")
      */
-    public $stateInsee;
+    public $state;
 
     /**
      * Gets the id of the entity
