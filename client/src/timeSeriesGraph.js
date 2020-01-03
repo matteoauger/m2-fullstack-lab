@@ -96,7 +96,9 @@ class timeSeriesGraph extends React.Component {
               
       // Add scales to axis
       var x_axis = d3.axisBottom()
-        .scale(x_scale);
+        .tickArguments([6])
+        .scale(x_scale)
+        .tickFormat(d3.format("d"));
 
       var y_axis = d3.axisLeft()
         .scale(y_scale);
