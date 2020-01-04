@@ -132,7 +132,6 @@ class Barchart extends React.Component {
 
     render() {
         return <body>
-            <h1>THIS IS A TEST</h1>
             <g id="svg1"></g>
         </body>
     }
