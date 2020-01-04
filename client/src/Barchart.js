@@ -90,7 +90,7 @@ class Barchart extends React.Component {
         const height = 500;
         const barWidth = width/nbData;
 
-        const svg = d3.select("#svg1")
+        const svg = d3.select("#barchart")
             .append("svg")
             .attr("width", width)
             .attr("height", height)
@@ -132,7 +132,7 @@ class Barchart extends React.Component {
 
     render() {
         return <body>
-            <g id="svg1"></g>
+            <g id="barchart"></g>
         </body>
     }
 };
