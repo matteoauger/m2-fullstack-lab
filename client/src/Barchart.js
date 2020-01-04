@@ -105,20 +105,6 @@ class Barchart extends React.Component {
             .attr("width", barWidth - 1)
             .attr("height", (d, i) => (d.sales_count/maxData)*(height-20))
             .attr("fill", "#0066cc")
-            .on("mouseover", function(d) {
-                const x = this.x;
-                d3.select(this).style("fill", "#0080ff")
-                .selectAll("text")
-                .data(d)
-                .enter()
-                .append("text")
-                .text((d) => d.sales_count)
-                .attr("x", () => x)
-                .attr("y", (d) => height - (d.sales_count/maxData)*(height-15));
-            })                  
-            .on("mouseout", function(d) {
-                d3.select(this).style("fill", "#0066cc");
-            });
 
 
         svg.selectAll("text")
@@ -132,6 +118,7 @@ class Barchart extends React.Component {
 
     render() {
         return <body>
+            <h1>THIS IS A TEST</h1>
             <g id="svg1"></g>
         </body>
     }
