@@ -85,22 +85,22 @@ class TimeSeriesGraph extends React.Component {
         .style("margin-left", 100);
 
       // Create scale
-      var x_scale = d3.scaleLinear()
+      const x_scale = d3.scaleLinear()
         .domain([2015, 2020])
         .range([0, width - 100]);
 
-      var highestY = 1000;
-      var y_scale = d3.scaleLinear()
+      const highestY = 1000;
+      const y_scale = d3.scaleLinear()
         .domain([0, highestY])
         .range([(height/2), 0]);
               
       // Add scales to axis
-      var x_axis = d3.axisBottom()
+      const x_axis = d3.axisBottom()
         .tickArguments([6])
         .scale(x_scale)
         .tickFormat(d3.format("d"));
 
-      var y_axis = d3.axisLeft()
+      const y_axis = d3.axisLeft()
         .scale(y_scale);
 
       //Append group and insert axis
@@ -112,19 +112,19 @@ class TimeSeriesGraph extends React.Component {
         .attr("transform", "translate(50, " + (height/2 + 10)+ ")")
         .call(x_axis)
 
-      var lineGenerator = d3.line();
+      const lineGenerator = d3.line();
 
-      var points = [];
+      const points = [];
 
 
-      var cpt = 0;
+      let cpt = 0;
       for (let [key, value] of Object.entries(data)) {
         for (let [index, element] of Object.entries(value)) {
           points[cpt++] = [cpt*((width-100)/numberElements), height/2 - ((height/(2*highestY))*parseFloat(element))];
         };
       }
 
-      var pathData = lineGenerator(points);
+      const pathData = lineGenerator(points);
 
       d3.select('path')
         .attr('d', pathData)
