@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 
 class PieChart extends React.Component {
   componentDidMount() {
+    this.fetchData()
     this.drawChart()
   }
 
@@ -25,6 +26,17 @@ class PieChart extends React.Component {
         "sales": "15"
       }
     ]
+  }
+
+  
+  fetchData() {
+    var myInit = { method: 'GET',
+               mode: 'cors',
+               cache: 'default' };
+    fetch("https://localhost:8443/land_value_claims/salesrepartition?year=2018", myInit)
+      .then(function(data) {
+        console.log(data);
+      })
   }
 
   drawChart() {
