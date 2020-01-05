@@ -2,40 +2,36 @@ import React from 'react';
 import * as d3 from 'd3';
 
 class PieChart extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.fetchData = this.fetchData.bind(this);
+
+    this.state = {
+      data: []
+    }
+  }
+
   componentDidMount() {
     this.fetchData()
+  }
+
+  componentDidUpdate() {
     this.drawChart()
   }
 
-  static_data() {
-    return [
-      {
-        "stateName": "Bretagne",
-        "sales": "10"
-      },{
-        "stateName": "Nouvelle Aquitaine",
-        "sales": "20"
-      },{
-        "stateName": "Normandie",
-        "sales": "5"
-      },{
-        "stateName": "Ile de France",
-        "sales": "50"
-      },{
-        "stateName": "Occitanie",
-        "sales": "15"
-      }
-    ]
-  }
-
-  
   fetchData() {
     var myInit = { method: 'GET',
                mode: 'cors',
                cache: 'default' };
     fetch("https://localhost:8443/land_value_claims/salesrepartition?year=2018", myInit)
-      .then(function(data) {
-        console.log(data);
+      .then((response) => {
+        response.json().then((data) => {
+          console.log(data)
+          this.setState({
+            data: data
+          })
+        })
       })
   }
 
@@ -46,7 +42,9 @@ class PieChart extends React.Component {
     const holeSize = 100;
 
     var radius = Math.min(width, height) / 2 - margin;
-    const data = this.static_data();
+    const data = this.state.data;
+
+    console.log(data)
 
     var svg = d3.select("body")
     .append("svg")
