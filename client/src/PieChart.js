@@ -6,9 +6,11 @@ class PieChart extends React.Component {
     super(props);
 
     this.fetchData = this.fetchData.bind(this);
+    this.changeYear = this.changeYear.bind(this);
 
     this.state = {
-      data: []
+      data: [],
+      year: 2018
     }
   }
 
@@ -16,15 +18,29 @@ class PieChart extends React.Component {
     this.fetchData()
   }
 
-  componentDidUpdate() {
-    this.drawChart()
+  componentDidUpdate(prevProps) {
+    if(prevProps.year !== this.state.year) {
+      this.fetchData()
+    }
+    d3.select("#svg").remove()
+    if(prevProps.data !== this.state.data) {
+      this.drawChart()
+    }
+  }
+
+  changeYear(event) {
+    this.setState({
+      year: event.target.value
+    })
+    
   }
 
   fetchData() {
     var myInit = { method: 'GET',
                mode: 'cors',
                cache: 'default' };
-    fetch("https://localhost:8443/land_value_claims/salesrepartition?year=2018", myInit)
+    console.log("#####", this.state.year);
+    fetch(`https://localhost:8443/land_value_claims/salesrepartition?year=${this.state.year}`, myInit)
       .then((response) => {
         response.json().then((data) => {
           console.log(data)
@@ -50,6 +66,7 @@ class PieChart extends React.Component {
     .append("svg")
       .attr("width", width)
       .attr("height", height)
+      .attr("id","svg")
     .append("g")
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
@@ -98,6 +115,13 @@ class PieChart extends React.Component {
     return (
       <div>
         <h1>Répartition des ventes par région</h1>
+        <select value={this.state.year} onChange={this.changeYear}>
+          <option value="2015">2015</option>
+          <option value="2016">2016</option>
+          <option value="2017">2017</option>
+          <option value="2018">2018</option>
+          <option value="2019">2019</option>
+        </select>
         <div id={"#" + this.props.id}></div>
       </div>
     )
