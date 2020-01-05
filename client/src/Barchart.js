@@ -95,6 +95,11 @@ class Barchart extends React.Component {
             .attr("width", width)
             .attr("height", height)
             .style("margin-left", 100);
+            
+        const tooltip = d3.select("#barchart")
+            .append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
 
         svg.selectAll("rect")
             .data(data)
@@ -106,28 +111,17 @@ class Barchart extends React.Component {
             .attr("height", (d, i) => (d.sales_count/maxData)*(height-20))
             .attr("fill", "#0066cc")
             .on("mouseover", function(d) {
-                const x = this.x;
-                d3.select(this).style("fill", "#0080ff")
-                .selectAll("text")
-                .data(d)
-                .enter()
-                .append("text")
-                .text((d) => d.sales_count)
-                .attr("x", () => x)
-                .attr("y", (d) => height - (d.sales_count/maxData)*(height-15));
-            })                  
+                d3.select(this).style("fill", "#0080ff");
+                tooltip.html(d.current_date + ": " + d.sales_count)
+                .style("font-size", "20px")
+                .style("left", (d3.event.pageX) + "px")		
+                .style("top", (d3.event.pageY - 28) + "px");
+                tooltip.style("opacity", 1);
+            })
             .on("mouseout", function(d) {
                 d3.select(this).style("fill", "#0066cc");
+                tooltip.style("opacity", 0);
             });
-
-
-        svg.selectAll("text")
-            .data(data)
-            .enter()
-            .append("text")
-            .text((d) => d.sales_count)
-            .attr("x", (d, i) => i * barWidth)
-            .attr("y", (d, i) => height - (d.sales_count/maxData)*(height-15))
     }
 
     render() {
