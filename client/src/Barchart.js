@@ -136,7 +136,8 @@ class Barchart extends React.Component {
 
     render() {
         return <body>
-            <g id="barchart"></g>
+            <title>Nombre de ventes</title>
+            <div id="barchart"></div>
         </body>
     }
 };
