@@ -1,5 +1,6 @@
 import React from 'react';
 import * as d3 from 'd3';
+import { fetch } from './utils/dataAccess';
 
 class PieChart extends React.Component {
   constructor(props) {
@@ -40,7 +41,7 @@ class PieChart extends React.Component {
                mode: 'cors',
                cache: 'default' };
     console.log("#####", this.state.year);
-    fetch(`https://localhost:8443/land_value_claims/salesrepartition?year=${this.state.year}`, myInit)
+    fetch(`land_value_claims/salesrepartition?year=${this.state.year}`, myInit)
       .then((response) => {
         response.json().then((data) => {
           console.log(data)
