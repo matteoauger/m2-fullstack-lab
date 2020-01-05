@@ -100,7 +100,7 @@ use App\Entity\Department;
  * itemOperations={"get", "patch", "put", "delete"}
  * )
  * @ORM\Entity
- * @ORM\Table(name="land_value_claim",indexes={@ORM\Index(name="mutation_idx", columns={"mutationDate", "mutationType"})})
+ * @ORM\Table(name="land_value_claim",indexes={@ORM\Index(name="mutation_idx", columns={"mutation_date", "mutation_type"})})
  */
 class LandValueClaim
 {
