@@ -30,6 +30,11 @@ class PieChart extends React.Component {
     .append("g")
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
+    const tooltip = d3.select("body")
+      .append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
+
     var color = d3.scaleOrdinal()
       .domain(data)
       .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56"]);
@@ -52,6 +57,18 @@ class PieChart extends React.Component {
       .attr("stroke", "black")
       .style("stroke-width", "2px")
       .style("opacity", 0.7)
+      .on("mouseover", function(d) {
+        d3.select(this).style("opacity", 0.9);
+        tooltip.html(d.stateName + ": " + d.sales)
+        .style("font-size", "20px")
+        .style("left", (d3.event.pageX) + "px")		
+        .style("top", (d3.event.pageY - 28) + "px");
+        tooltip.style("opacity", 1);
+    })
+    .on("mouseout", function(d) {
+        d3.select(this).style("opacity", 0.7);
+        tooltip.style("opacity", 0);
+    });
   }
 
   render(){
