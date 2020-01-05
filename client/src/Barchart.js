@@ -88,7 +88,7 @@ class Barchart extends React.Component {
         const maxData = d3.max(data, (d) => { return d.sales_count });
         const width = 1000;
         const height = 500;
-        const barWidth = width/nbData;
+        const barWidth = (width-50)/nbData;
 
         const svg = d3.select("#barchart")
             .append("svg")
@@ -101,25 +101,35 @@ class Barchart extends React.Component {
             .attr("class", "tooltip")
             .style("opacity", 0);
 
+        const y_scale = d3.scaleLinear()
+            .domain([0, maxData])
+            .range([height-22, 0]);
+
+        const y_axis = d3.axisLeft().scale(y_scale);
+
+        svg.append("g")
+            .attr("transform", "translate(50, 20)")
+            .call(y_axis);
+
         svg.selectAll("rect")
             .data(data)
             .enter()
             .append("rect")
-            .attr("x", (d, i) => i * barWidth)
+            .attr("x", (d, i) => 52+i * barWidth)
             .attr("y", (d, i) => height - (d.sales_count/maxData)*(height-20))
             .attr("width", barWidth - 1)
             .attr("height", (d, i) => (d.sales_count/maxData)*(height-20))
             .attr("fill", "#0066cc")
             .on("mouseover", function(d) {
-                d3.select(this).style("fill", "#0080ff");
-                tooltip.html(d.current_date + ": " + d.sales_count)
-                .style("font-size", "20px")
-                .style("left", (d3.event.pageX) + "px")		
-                .style("top", (d3.event.pageY - 28) + "px");
+                d3.select(this).attr("fill", "#0080ff");
+                tooltip.html(d.current_date + ": " + d.sales_count + " ventes")
+                    .style("font-size", "20px")
+                    .style("left", (d3.event.pageX) + "px")		
+                    .style("top", (d3.event.pageY - 28) + "px");
                 tooltip.style("opacity", 1);
             })
             .on("mouseout", function(d) {
-                d3.select(this).style("fill", "#0066cc");
+                d3.select(this).attr("fill", "#0066cc");
                 tooltip.style("opacity", 0);
             });
     }
