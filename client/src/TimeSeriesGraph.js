@@ -1,7 +1,7 @@
 import React from 'react';
 import * as d3 from 'd3';
 
-class timeSeriesGraph extends React.Component {
+class TimeSeriesGraph extends React.Component {
     componentDidMount() {
       this.drawChart();
     }
@@ -141,4 +141,4 @@ class timeSeriesGraph extends React.Component {
     }
   }
       
-  export default timeSeriesGraph;
+  export default TimeSeriesGraph;
