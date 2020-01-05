@@ -20,7 +20,7 @@ class Department {
      * @ORM\Id
      * @ORM\Column(type="string", unique=true)
      * @Assert\NotBlank
-     * @AcmeAssert\DepCode
+     * @AcmeAssert\Depcode
      */
     public $id;
 
