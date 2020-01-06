@@ -43,7 +43,6 @@ class PieChart extends React.Component {
     fetch(`land_value_claims/salesrepartition?year=${this.state.year}`, myInit)
       .then((response) => {
         response.json().then((data) => {
-          console.log(data)
           this.setState({
             data: data
           })
@@ -83,14 +82,14 @@ class PieChart extends React.Component {
       .value(function(d) {
         return d.sales;
       });
-    // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
+
     svg
       .selectAll('whatever')
       .data(pie(data))
       .enter()
       .append('path')
       .attr('d', d3.arc()
-        .innerRadius(holeSize)         // This is the size of the donut hole
+        .innerRadius(holeSize)    
         .outerRadius(radius)
       )
       .attr('fill', function(d){ return(color(d.data.sales)) })
