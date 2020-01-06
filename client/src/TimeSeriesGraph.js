@@ -225,7 +225,7 @@ class TimeSeriesGraph extends React.Component {
       const maxYear = d3.max(data, ({ year }) => year) + 1;
       const numberElements = (maxYear - minYear) * 12;
       
-      const svg = d3.select("body")
+      const svg = d3.select("#graph")
         .append("svg")
         .attr("width", width)
         .attr("height", height)
@@ -287,7 +287,7 @@ class TimeSeriesGraph extends React.Component {
       return (
         <div>
           <h1>Prix moyen du m2</h1>
-          <div id={"#" + this.props.id}></div>
+          <div id='graph'></div>
         </div>
       )
     }
