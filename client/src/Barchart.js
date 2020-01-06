@@ -42,7 +42,6 @@ class Barchart extends React.Component {
         fetch(`land_value_claims/salesbyinterval?interval=${this.state.interval}&date_start=2015-01-01&date_end=2015-01-10`, myInit)
           .then((response) => {
             response.json().then((data) => {
-              console.log(data)
               this.setState({
                 data
               })
