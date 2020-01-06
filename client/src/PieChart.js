@@ -60,8 +60,6 @@ class PieChart extends React.Component {
     var radius = Math.min(width, height) / 2 - margin;
     const data = this.state.data;
 
-    console.log(data)
-
     var svg = d3.select("body")
     .append("svg")
       .attr("width", width)
