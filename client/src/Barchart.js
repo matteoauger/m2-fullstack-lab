@@ -23,7 +23,7 @@ class Barchart extends React.Component {
         if(prevState.interval !== this.state.interval) {
             this.fetchData()
         }
-        d3.select("#svg").remove()
+        d3.select("svg").remove()
         if(prevState.data !== this.state.data) {
             this.drawChart()
         }
