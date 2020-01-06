@@ -1,89 +1,39 @@
 import React from 'react';
 import * as d3 from 'd3';
+import { fetch } from './utils/dataAccess';
 
 class Barchart extends React.Component {
-    componentDidMount() {
-      this.drawChart();
-    }
- 
-    static_data() {
-        return [
-            { 
-                "current_date": "2019-01-02",
-                "sales_count": 1000
-            },
-            { 
-                "current_date": "2019-01-03",
-                "sales_count": 536
-            },
-            { 
-                "current_date": "2019-01-04",
-                "sales_count": 340
-            },
-            { 
-                "current_date": "2019-01-05",
-                "sales_count": 860
-            },
-            { 
-                "current_date": "2019-01-06",
-                "sales_count": 910
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 453
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 752
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 962
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 357
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 852
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 354
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 753
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 159
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 357
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 854
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 910
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 654
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 456
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 658
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 851
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 359
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 645
-            }
-        ]
+    constructor(props) {
+        super(props)
+
+        this.fetchData = this.fetchData.bind(this)
     }
 
+    componentDidMount() {
+      this.fetchData();
+    }
+
+    componentDidUpdate() {
+        this.drawChart();
+    }
+
+    fetchData() {
+        const myInit = { method: 'GET',
+                   mode: 'cors',
+                   cache: 'default' };
+        fetch(`land_value_claims/salesbyinterval?interval=month&date_start=2015-01-01&date_end=2016-01-01`, myInit)
+          .then((response) => {
+            response.json().then((data) => {
+              console.log(data)
+              this.setState({
+                data
+              })
+            })
+          })
+      }
+
     drawChart() {
-        const data = this.static_data();
+        const data = this.state.data;
         const nbData = data.length;
         const maxData = d3.max(data, (d) => { return d.sales_count });
         const width = 1000;
