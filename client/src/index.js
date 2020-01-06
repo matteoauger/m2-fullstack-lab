@@ -16,6 +16,7 @@ import 'font-awesome/css/font-awesome.css';
 import * as serviceWorker from './serviceWorker';
 // Import your reducers and routes here
 import Welcome from './Welcome';
+import Barchart from './Barchart';
 import PieChart from './PieChart';
 
 const history = createBrowserHistory();
@@ -33,6 +34,7 @@ ReactDOM.render(
     <ConnectedRouter history={history}>
       <Switch>
         <Route path="/" component={Welcome} strict={true} exact={true}/>
+        <Route path="/barchart" component={Barchart} strict={true} exact={true}/>
         {/* Add your routes here */}
         <Route path="/graphs" component={PieChart} strict={true} exact={true}/>
         <Route render={() => <h1>Not Found</h1>} />
