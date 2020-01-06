@@ -9,7 +9,7 @@ class Barchart extends React.Component {
     static_data() {
         return [
             { 
-                "current_date": "2019-01-02",
+                "current_date": "2019-01-02 51 51513",
                 "sales_count": 1000
             },
             { 
@@ -123,7 +123,7 @@ class Barchart extends React.Component {
             .attr("fill", "#0066cc")
             .on("mouseover", function(d, i) {
                 d3.select(this).attr("fill", "#0080ff");
-                tooltip.html(d.current_date+"<br>"+d.sales_count + " ventes")
+                tooltip.html(d.current_date.slice(0,10)+"<br>"+d.sales_count + " ventes")
                     .style("font-size", "20px")
                     .style("text-anchor", "middle")
                     .style("left", (52+ (i+1) * barWidth + barWidth/2) + "px")		
