@@ -92,11 +92,12 @@ class Barchart extends React.Component {
 
         const svg = d3.select("#barchart")
             .append("svg")
+            .attr("id", "graph")
             .attr("width", width)
             .attr("height", height)
             .style("margin-left", 100);
             
-        const tooltip = d3.select("#barchart")
+        const tooltip = d3.select("#labels")
             .append("div")
             .attr("class", "tooltip")
             .style("opacity", 0);
@@ -120,12 +121,12 @@ class Barchart extends React.Component {
             .attr("width", barWidth - 1)
             .attr("height", (d, i) => (d.sales_count/maxData)*(height-20) - 3)
             .attr("fill", "#0066cc")
-            .on("mouseover", function(d) {
+            .on("mouseover", function(d, i) {
                 d3.select(this).attr("fill", "#0080ff");
-                tooltip.html(d.current_date + ": " + d.sales_count + " ventes")
+                tooltip.html(d.sales_count + " ventes")
                     .style("font-size", "20px")
-                    .style("left", (d3.event.pageX) + "px")		
-                    .style("top", (d3.event.pageY - 28) + "px");
+                    .style("text-anchor", "middle")
+                    .style("left", (52+ (i+1) * barWidth + barWidth/2) + "px")		
                 tooltip.style("opacity", 1);
             })
             .on("mouseout", function(d) {
@@ -136,8 +137,9 @@ class Barchart extends React.Component {
 
     render() {
         return <body>
-            <title>Nombre de ventes</title>
+            <h1>Nombre de ventes</h1>
             <div id="barchart"></div>
+            <div id="labels"></div>
         </body>
     }
 };
