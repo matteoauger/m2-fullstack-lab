@@ -283,10 +283,10 @@ class TimeSeriesGraph extends React.Component {
       .style("stroke", "#0297db");
   }
         
-  render(){
+  render() {
     return (
       <div>
-        <h1>Prix moyen du m2</h1>
+        <h2>Prix moyen du m2</h2>
         <div id='graph'></div>
       </div>
     )

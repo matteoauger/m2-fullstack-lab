@@ -114,7 +114,7 @@ class PieChart extends React.Component {
   render(){
     return (
       <div>
-        <h1>Répartition des ventes par région</h1>
+        <h2>Répartition des ventes par région</h2>
         <select value={this.state.year} onChange={this.changeYear}>
           <option value="2015">2015</option>
           <option value="2016">2016</option>
