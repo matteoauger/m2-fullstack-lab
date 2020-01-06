@@ -37,7 +37,7 @@ class PieChart extends React.Component {
   }
 
   fetchData() {
-    var myInit = { method: 'GET',
+    const myInit = { method: 'GET',
                mode: 'cors',
                cache: 'default' };
     fetch(`land_value_claims/salesrepartition?year=${this.state.year}`, myInit)
