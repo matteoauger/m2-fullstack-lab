@@ -3,9 +3,9 @@ import * as d3 from 'd3';
 
 class Barchart extends React.Component {
     componentDidMount() {
-      this.drawChart();
+        this.drawChart();
     }
- 
+
     static_data() {
         return [
             { 
@@ -135,10 +135,11 @@ class Barchart extends React.Component {
     }
 
     render() {
-        return <body>
-            <title>Nombre de ventes</title>
+        return <div>
+            <title>Evolution du nombre de ventes</title>
+            <h2>Evolution du nombre de ventes</h2>
             <div id="barchart"></div>
-        </body>
+        </div>
     }
 };
 
