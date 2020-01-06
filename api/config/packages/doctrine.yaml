@@ -17,3 +17,7 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
+        dql:
+            datetime_functions: 
+                EXTRACT: DoctrineExtensions\Query\Postgresql\ExtractFunction
+                date_trunc: App\DoctrineExtensions\DateTrunc
