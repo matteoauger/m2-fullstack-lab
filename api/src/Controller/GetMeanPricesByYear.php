@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class GetMeanPricesByYear 
 {
@@ -34,8 +35,21 @@ class GetMeanPricesByYear
         $query_result = $this->em
                 ->createQuery($request)
                 ->getResult();
+
+        // Map query results.
+        $result = array_map(function($data) {
+            $data['mean'] = floatval($data['mean']);
+            return $data;
+        }, $query_result);
         
-        return $query_result;
+        // Build response.
+        $response = new Response(
+            json_encode($result), 
+            Response::HTTP_OK,
+            ['content-type' => 'application/json']
+        );
+        
+        return $response;
     }
 }
 ?>
