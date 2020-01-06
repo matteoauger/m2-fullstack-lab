@@ -103,7 +103,7 @@ class Barchart extends React.Component {
 
         const y_scale = d3.scaleLinear()
             .domain([0, maxData])
-            .range([height-22, 0]);
+            .range([height-25, 0]);
 
         const y_axis = d3.axisLeft().scale(y_scale);
 
@@ -118,7 +118,7 @@ class Barchart extends React.Component {
             .attr("x", (d, i) => 52+i * barWidth)
             .attr("y", (d, i) => height - (d.sales_count/maxData)*(height-20))
             .attr("width", barWidth - 1)
-            .attr("height", (d, i) => (d.sales_count/maxData)*(height-20))
+            .attr("height", (d, i) => (d.sales_count/maxData)*(height-20) - 3)
             .attr("fill", "#0066cc")
             .on("mouseover", function(d) {
                 d3.select(this).attr("fill", "#0080ff");
