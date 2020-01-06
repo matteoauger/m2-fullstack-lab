@@ -102,6 +102,12 @@ class Barchart extends React.Component {
             .attr("class", "tooltip")
             .style("opacity", 0);
 
+        const x_scale = d3.scaleLinear()
+            .domain([0, nbData])
+            .range([new Date(data[0].current_date), new Date(data[nbData-1].current_date)]);
+
+        const x_axis = d3.axisBottom().scale(x_scale);
+
         const y_scale = d3.scaleLinear()
             .domain([0, maxData])
             .range([height-25, 0]);
@@ -111,6 +117,9 @@ class Barchart extends React.Component {
         svg.append("g")
             .attr("transform", "translate(50, 20)")
             .call(y_axis);
+
+        svg.append("g")
+            .call(x_axis);    
 
         svg.selectAll("rect")
             .data(data)
@@ -123,7 +132,7 @@ class Barchart extends React.Component {
             .attr("fill", "#0066cc")
             .on("mouseover", function(d, i) {
                 d3.select(this).attr("fill", "#0080ff");
-                tooltip.html(d.sales_count + " ventes")
+                tooltip.html(d.current_date+"<br>"+d.sales_count + " ventes")
                     .style("font-size", "20px")
                     .style("text-anchor", "middle")
                     .style("left", (52+ (i+1) * barWidth + barWidth/2) + "px")		
