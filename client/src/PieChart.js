@@ -23,7 +23,7 @@ class PieChart extends React.Component {
     if(prevState.year !== this.state.year) {
       this.fetchData()
     }
-    d3.select("#svg").remove()
+    d3.select("svg").remove()
     if(prevState.data !== this.state.data) {
       this.drawChart()
     }
@@ -58,7 +58,7 @@ class PieChart extends React.Component {
     const radius = Math.min(width, height) / 2 - margin;
     const data = this.state.data;
 
-    const svg = d3.select("body")
+    const svg = d3.select("#graph")
     .append("svg")
       .attr("width", width)
       .attr("height", height)
