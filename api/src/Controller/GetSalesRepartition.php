@@ -49,14 +49,20 @@ class GetSalesRepartition {
                 ->createQuery($request)
                 ->getResult();
 
-        // build response
-        $res = new Response(
-            json_encode($query_result), 
+        // Map query results.
+        $result = array_map(function($data) {
+            $data['sales'] = floatval($data['sales']);
+            return $data;
+        }, $query_result);
+
+        // Build response.
+        $response = new Response(
+            json_encode($result), 
             Response::HTTP_OK,
             ['content-type' => 'application/json']
         );
         
-        return $res;
+        return $response;
     }
 }
 
