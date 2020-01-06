@@ -102,12 +102,6 @@ class Barchart extends React.Component {
             .attr("class", "tooltip")
             .style("opacity", 0);
 
-        const x_scale = d3.scaleLinear()
-            .domain([0, nbData])
-            .range([new Date(data[0].current_date), new Date(data[nbData-1].current_date)]);
-
-        const x_axis = d3.axisBottom().scale(x_scale);
-
         const y_scale = d3.scaleLinear()
             .domain([0, maxData])
             .range([height-25, 0]);
