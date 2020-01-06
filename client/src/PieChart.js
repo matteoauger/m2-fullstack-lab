@@ -19,12 +19,12 @@ class PieChart extends React.Component {
     this.fetchData()
   }
 
-  componentDidUpdate(prevProps) {
-    if(prevProps.year !== this.state.year) {
+  componentDidUpdate(prevProps, prevState) {
+    if(prevState.year !== this.state.year) {
       this.fetchData()
     }
     d3.select("#svg").remove()
-    if(prevProps.data !== this.state.data) {
+    if(prevState.data !== this.state.data) {
       this.drawChart()
     }
   }
@@ -40,7 +40,6 @@ class PieChart extends React.Component {
     var myInit = { method: 'GET',
                mode: 'cors',
                cache: 'default' };
-    console.log("#####", this.state.year);
     fetch(`land_value_claims/salesrepartition?year=${this.state.year}`, myInit)
       .then((response) => {
         response.json().then((data) => {
