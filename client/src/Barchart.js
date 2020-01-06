@@ -109,6 +109,8 @@ class Barchart extends React.Component {
                 <option value="month">Mois</option>
                 <option value="year">Année</option>
             </select>
+            <input type="date" name="startDate"></input>
+            <input type="date" name="endDate"></input>
             <div id="barchart"></div>
         </body>
     }

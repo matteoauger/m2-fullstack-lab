@@ -36,7 +36,7 @@ class PieChart extends React.Component {
   }
 
   fetchData() {
-    var myInit = { method: 'GET',
+    const myInit = { method: 'GET',
                mode: 'cors',
                cache: 'default' };
     fetch(`land_value_claims/salesrepartition?year=${this.state.year}`, myInit)
@@ -55,10 +55,10 @@ class PieChart extends React.Component {
     const margin = 100;
     const holeSize = 100;
 
-    var radius = Math.min(width, height) / 2 - margin;
+    const radius = Math.min(width, height) / 2 - margin;
     const data = this.state.data;
 
-    var svg = d3.select("body")
+    const svg = d3.select("body")
     .append("svg")
       .attr("width", width)
       .attr("height", height)
@@ -66,12 +66,12 @@ class PieChart extends React.Component {
     .append("g")
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-    const tooltip = d3.select("body")
+    const tooltip = d3.select("#graph")
       .append("div")
       .attr("class", "tooltip")
       .style("opacity", 0);
 
-    var color = d3.scaleOrdinal()
+    const color = d3.scaleOrdinal()
       .domain(data)
       .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56"]);
 
@@ -118,7 +118,7 @@ class PieChart extends React.Component {
           <option value="2018">2018</option>
           <option value="2019">2019</option>
         </select>
-        <div id={"#" + this.props.id}></div>
+        <div id="graph"></div>
       </div>
     )
   }
