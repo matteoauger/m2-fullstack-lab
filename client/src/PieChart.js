@@ -59,9 +59,7 @@ class PieChart extends React.Component {
     const radius = Math.min(width, height) / 2 - margin;
     const data = this.state.data;
 
-    console.log(data)
-
-    let svg = d3.select("body")
+    let svg = d3.select("#piechart")
     .append("svg")
       .attr("width", width)
       .attr("height", height)
@@ -69,7 +67,7 @@ class PieChart extends React.Component {
     .append("g")
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-    const tooltip = d3.select("body")
+    const tooltip = d3.select("#labels")
       .append("div")
       .attr("class", "tooltip")
       .style("opacity", 0);
@@ -82,14 +80,14 @@ class PieChart extends React.Component {
       .value(function(d) {
         return d.sales;
       });
-    // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
+
     svg
       .selectAll('whatever')
       .data(pie(data))
       .enter()
       .append('path')
       .attr('d', d3.arc()
-        .innerRadius(holeSize)         // This is the size of the donut hole
+        .innerRadius(holeSize)    
         .outerRadius(radius)
       )
       .attr('fill', function(d){ return(color(d.data.sales)) })
@@ -100,8 +98,7 @@ class PieChart extends React.Component {
         d3.select(this).style("opacity", 0.9);
         tooltip.html(d.data.stateName + ": " + d.data.sales)
         .style("font-size", "20px")
-        .style("left", (d3.event.pageX) + "px")		
-        .style("top", (d3.event.pageY - 28) + "px");
+        .style("left", margin + "px")	
         tooltip.style("opacity", 1);
     })
     .on("mouseout", function(d) {
@@ -121,7 +118,8 @@ class PieChart extends React.Component {
           <option value="2018">2018</option>
           <option value="2019">2019</option>
         </select>
-        <div id={"#" + this.props.id}></div>
+        <div id="piechart"></div>
+        <div id="labels"></div>
       </div>
     )
   }
