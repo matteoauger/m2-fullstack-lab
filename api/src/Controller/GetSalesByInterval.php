@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class GetSalesByInterval
 {
@@ -25,6 +26,17 @@ class GetSalesByInterval
         $date_start = $data->query->get('date_start');
         $date_end = $data->query->get('date_end');
 
+        // Prevent SQL Injection.
+        if (!preg_match('/^(day|month|year)$/', $interval) ||
+            !preg_match('/^\d{1,2}-\d{1,2}-\d{1,4}\/$/', $date_start) ||
+            !preg_match('/^\d{1,2}-\d{1,2}-\d{1,4}\/$/', $date_end)) {
+            return  new Response(
+                'Bad request',
+                Response::HTTP_BAD_REQUEST,
+                ['content-type' => 'application/json']
+            );
+        }
+
         // Prepares the request. 
         $request = "SELECT
                         DATE_TRUNC('$interval', c.mutationDate) AS current_date,
@@ -40,8 +52,21 @@ class GetSalesByInterval
         $query_result = $this->em
                 ->createQuery($request)
                 ->getResult();
+
+        // Map query results.
+        $result = array_map(function($data) {
+            $data['sales_count'] = intval($data['sales_count']);
+            return $data;
+        }, $query_result);
                 
-        return $query_result;
+        // Build response.
+        $response = new Response(
+            json_encode($result), 
+            Response::HTTP_OK,
+            ['content-type' => 'application/json']
+        );
+        
+        return $response;
     }
 }
 ?>

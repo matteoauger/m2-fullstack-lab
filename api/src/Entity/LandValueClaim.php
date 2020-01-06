@@ -16,31 +16,31 @@ use App\Entity\Department;
  *
  * @ApiResource(
  * collectionOperations={
- *      "get",
- *      "post",
- *      "meanprices"={
+ *     "get",
+ *     "post",
+ *     "meanprices"={
  *         "method"="GET",
  *         "path"="land_value_claims/meanprices",
  *         "controller"=App\Controller\GetMeanPricesByYear::class,
  *         "pagination_enabled"=false,
- *         "read"= false,
+ *         "read"=false,
  *         "openapi_context"={
- *              "summary"="Gets the mean land value claim price for each month for each year",
- *              "description"="Gets the mean land value claim price for each month for each year",
- *              "read"="false"
- *          }
+ *             "summary"="Gets the mean land value claim price for each month for each year",
+ *             "description"="Gets the mean land value claim price for each month for each year",
+ *             "read"=false
+ *         }
  *     },
  *     "sales_repartition"={
  *         "method"="GET",
  *         "path"="land_value_claims/salesrepartition",
  *         "controller"=GetSalesRepartition::class,
  *         "pagination_enabled"=false,
- *         "read"= false,
- *         "openapi_context" = {
- *              "summary" = "Gets the sales repartition by state.",
- *              "description" = "Gets the sales repartition by state",
- *              "read"="false",
- *              "parameters"= {
+ *         "read"=false,
+ *         "openapi_context"={
+ *              "summary"="Gets the sales repartition by state.",
+ *              "description"="Gets the sales repartition by state",
+ *              "read"=false,
+ *              "parameters"={
  *                  {
  *                      "in" = "query",
  *                      "name" = "year",
@@ -53,14 +53,14 @@ use App\Entity\Department;
  *                  }             
  *              }
  *          }
- *     },
+ *      },
  *      "salesbyinterval"={
  *          "method"="GET",
  *          "path"="land_value_claims/salesbyinterval",
  *          "controller"=App\Controller\GetSalesByInterval::class,
  *          "pagination_enabled"=false,
  *          "read"=false,
- *          "openapri_context"={
+ *          "openapi_context"={
  *              "read"=false,
  *              "parameters"={
  *                  {
