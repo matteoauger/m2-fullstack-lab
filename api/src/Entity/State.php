@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
- * @ApiResource
+ * @ApiResource(collectionOperations={},itemOperations={})
  */
 class State {
 

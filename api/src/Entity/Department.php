@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping\JoinColumn;
 
 /**
  * @ORM\Entity
- * @ApiResource
+ * @ApiResource(collectionOperations={},itemOperations={})
  * @UniqueEntity(fields="id", message="This department already exists.")
  */
 class Department {
