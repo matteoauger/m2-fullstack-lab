@@ -8,6 +8,7 @@ use App\Entity\Department;
 use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\ORM\EntityManager;
 
 /*
  * [0] => Code service CH
@@ -71,7 +72,7 @@ class LVCFixtures extends CSVFixture implements DependentFixtureInterface
     /**
      * @see https://static.data.gouv.fr/resources/demandes-de-valeurs-foncieres/20191220-102114/notice-descriptive-du-fichier-dvf.pdf
      */
-    public function loadFromCSV(ObjectManager $manager, $data, $index)
+    public function loadFromCSV(EntityManager $manager, $data, $index)
     {
         $mutationDate = $data[8];
         $mutationType = $data[9];

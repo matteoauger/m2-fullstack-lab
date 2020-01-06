@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class GetSalesByInterval
 {
@@ -40,8 +41,21 @@ class GetSalesByInterval
         $query_result = $this->em
                 ->createQuery($request)
                 ->getResult();
+
+        // Map query results.
+        $result = array_map(function($data) {
+            $data['sales_count'] = intval($data['sales_count']);
+            return $data;
+        }, $query_result);
                 
-        return $query_result;
+        // Build response.
+        $response = new Response(
+            json_encode($result), 
+            Response::HTTP_OK,
+            ['content-type' => 'application/json']
+        );
+        
+        return $response;
     }
 }
 ?>

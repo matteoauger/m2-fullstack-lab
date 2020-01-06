@@ -4,7 +4,7 @@ namespace App\DataFixtures;
 
 use App\DataFixtures\ORM\CSVFixture;
 use App\Entity\State;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManager;
 
 class StateFixtures extends CSVFixture
 {
@@ -13,7 +13,7 @@ class StateFixtures extends CSVFixture
         parent::__construct("data/regions.txt");        
     }
 
-    public function loadFromCSV(ObjectManager $manager, $data, $index)
+    public function loadFromCSV(EntityManager $manager, $data, $index)
     {
         $inseeCode = $data[0];
         $name = $data[1];
