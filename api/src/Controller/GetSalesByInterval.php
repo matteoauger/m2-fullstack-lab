@@ -28,9 +28,9 @@ class GetSalesByInterval
 
         // Prevent SQL Injection.
         if (!preg_match('/^(day|month|year)$/', $interval) ||
-            !preg_match('/^\d{1,4}-\d{1,2}-\d{1,2}\/$/', $date_start) ||
-            !preg_match('/^\d{1,4}-\d{1,2}-\d{1,2}\/$/', $date_end)) {
-            return  new Response(
+            !preg_match('/^\d{1,4}-\d{1,2}-\d{1,2}$/', $date_start) ||
+            !preg_match('/^\d{1,4}-\d{1,2}-\d{1,2}$/', $date_end)) {
+            return new Response(
                 'Bad request',
                 Response::HTTP_BAD_REQUEST,
                 ['content-type' => 'application/text']
