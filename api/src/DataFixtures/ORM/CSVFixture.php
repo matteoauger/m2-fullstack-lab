@@ -4,6 +4,7 @@ namespace App\DataFixtures\ORM;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManager;
 
 abstract class CSVFixture extends Fixture
 {
@@ -53,5 +54,5 @@ abstract class CSVFixture extends Fixture
         $config->setSQLLogger($logger);
     }
 
-    abstract public function loadFromCSV(ObjectManager $manager, $data, $index);
+    abstract public function loadFromCSV(EntityManager $manager, $data, $index);
 }

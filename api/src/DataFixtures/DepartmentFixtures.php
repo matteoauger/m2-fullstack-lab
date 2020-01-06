@@ -7,6 +7,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use App\Entity\Department;
 use App\Entity\State;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManager;
 
 class DepartmentFixtures extends CSVFixture implements DependentFixtureInterface
 {
@@ -15,7 +16,7 @@ class DepartmentFixtures extends CSVFixture implements DependentFixtureInterface
         parent::__construct(array("data/departments.txt"));
     }
 
-    public function loadFromCSV(ObjectManager $manager, $data, $index)
+    public function loadFromCSV(EntityManager $manager, $data, $index)
     {
         $inseeCode = $data[0];
         $name = $data[1];
