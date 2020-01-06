@@ -7,21 +7,39 @@ class Barchart extends React.Component {
         super(props)
 
         this.fetchData = this.fetchData.bind(this)
+        this.changeInterval = this.changeInterval.bind(this)
+
+        this.state = ({
+            data: [],
+            interval: "month"
+        })
     }
 
     componentDidMount() {
       this.fetchData();
     }
 
-    componentDidUpdate() {
-        this.drawChart();
+    componentDidUpdate(prevProps, prevState) {
+        if(prevState.interval !== this.state.interval) {
+            this.fetchData()
+        }
+        d3.select("#svg").remove()
+        if(prevState.data !== this.state.data) {
+            this.drawChart()
+        }
+    }
+
+    changeInterval(event) {
+        this.setState({
+            interval: event.target.value
+        })
     }
 
     fetchData() {
         const myInit = { method: 'GET',
                    mode: 'cors',
                    cache: 'default' };
-        fetch(`land_value_claims/salesbyinterval?interval=month&date_start=2015-01-01&date_end=2016-01-01`, myInit)
+        fetch(`land_value_claims/salesbyinterval?interval=${this.state.interval}&date_start=2015-01-01&date_end=2015-01-10`, myInit)
           .then((response) => {
             response.json().then((data) => {
               console.log(data)
@@ -87,6 +105,11 @@ class Barchart extends React.Component {
     render() {
         return <body>
             <title>Nombre de ventes</title>
+            <select value={this.state.interval} onChange={this.changeInterval}>
+                <option value="day">Jour</option>
+                <option value="month">Mois</option>
+                <option value="year">Année</option>
+            </select>
             <div id="barchart"></div>
         </body>
     }

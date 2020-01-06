@@ -33,7 +33,6 @@ class PieChart extends React.Component {
     this.setState({
       year: event.target.value
     })
-    
   }
 
   fetchData() {
