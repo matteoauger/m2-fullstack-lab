@@ -34,7 +34,6 @@ class TimeSeriesGraph extends React.Component {
     fetch(`land_value_claims/meanprices`, myInit)
       .then((response) => {
         response.json().then((data) => {
-          console.log(typeof data)
           this.setState({
             data
           })
