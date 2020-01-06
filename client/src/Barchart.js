@@ -110,10 +110,7 @@ class Barchart extends React.Component {
 
         svg.append("g")
             .attr("transform", "translate(50, 20)")
-            .call(y_axis);
-
-        svg.append("g")
-            .call(x_axis);    
+            .call(y_axis);   
 
         svg.selectAll("rect")
             .data(data)
