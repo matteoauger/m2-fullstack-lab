@@ -1,26 +1,25 @@
 import React from 'react';
 import * as d3 from 'd3';
 import { fetch } from './utils/dataAccess';
-
 class Barchart extends React.Component {
     constructor(props) {
         super(props)
-
         this.fetchData = this.fetchData.bind(this)
         this.changeInterval = this.changeInterval.bind(this)
-
+        this.changeStartDate = this.changeStartDate.bind(this)
+        this.changeEndDate = this.changeEndDate.bind(this)
         this.state = ({
             data: [],
-            interval: "month"
+            interval: "month",
+            startDate: "2015-01-01",
+            endDate: "2016-01-01"
         })
     }
-
     componentDidMount() {
       this.fetchData();
     }
-
     componentDidUpdate(prevProps, prevState) {
-        if(prevState.interval !== this.state.interval) {
+        if(prevState.interval !== this.state.interval || prevState.startDate !== this.state.startDate || prevState.endDate !== this.state.endDate) {
             this.fetchData()
         }
         d3.select("svg").remove()
@@ -28,18 +27,26 @@ class Barchart extends React.Component {
             this.drawChart()
         }
     }
-
     changeInterval(event) {
         this.setState({
             interval: event.target.value
         })
     }
-
+    changeStartDate(event) {
+        this.setState({
+            startDate: event.target.value
+        })
+    }
+    changeEndDate(event) {
+        this.setState({
+            endDate: event.target.value
+        })
+    }
     fetchData() {
         const myInit = { method: 'GET',
                    mode: 'cors',
                    cache: 'default' };
-        fetch(`land_value_claims/salesbyinterval?interval=${this.state.interval}&date_start=2015-01-01&date_end=2015-01-10`, myInit)
+        fetch(`land_value_claims/salesbyinterval?interval=${this.state.interval}&date_start=${this.state.startDate}&date_end=${this.state.endDate}`, myInit)
           .then((response) => {
             response.json().then((data) => {
               this.setState({
@@ -48,7 +55,6 @@ class Barchart extends React.Component {
             })
           })
       }
-
     drawChart() {
         const data = this.state.data;
         const nbData = data.length;
@@ -56,28 +62,22 @@ class Barchart extends React.Component {
         const width = 1000;
         const height = 500;
         const barWidth = (width-50)/nbData;
-
         const svg = d3.select("#barchart")
             .append("svg")
             .attr("width", width)
             .attr("height", height)
             .style("margin-left", 100);
-            
         const tooltip = d3.select("#barchart")
             .append("div")
             .attr("class", "tooltip")
             .style("opacity", 0);
-
         const y_scale = d3.scaleLinear()
             .domain([0, maxData])
             .range([height-25, 0]);
-
         const y_axis = d3.axisLeft().scale(y_scale);
-
         svg.append("g")
             .attr("transform", "translate(50, 20)")
             .call(y_axis);
-
         svg.selectAll("rect")
             .data(data)
             .enter()
@@ -100,7 +100,6 @@ class Barchart extends React.Component {
                 tooltip.style("opacity", 0);
             });
     }
-
     render() {
         return <body>
             <title>Nombre de ventes</title>
@@ -109,11 +108,10 @@ class Barchart extends React.Component {
                 <option value="month">Mois</option>
                 <option value="year">Année</option>
             </select>
-            <input type="date" name="startDate"></input>
-            <input type="date" name="endDate"></input>
+            <input type="date" name="startDate" value={this.state.startDate} onChange={this.changeStartDate}></input>
+            <input type="date" name="endDate" value={this.state.endDate} onChange={this.changeEndDate}></input>
             <div id="barchart"></div>
         </body>
     }
 };
-
 export default Barchart;
