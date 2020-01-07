@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,10 +19,6 @@ class GetSalesByInterval
     public function __construct(EntityManagerInterface $em) 
     {
         $this->em = $em;
-    }
-
-    function checkParam($param, $pattern, $error_message) {
-        
     }
 
     public function __invoke(Request $data) 
@@ -50,6 +47,17 @@ class GetSalesByInterval
         if (!preg_match('/^\d{1,4}-\d{1,2}-\d{1,2}$/', $date_end)) {
             return new Response(
                 'Bad request: Illegal date_end',
+                Response::HTTP_BAD_REQUEST,
+                ['content-type' => 'application/text']
+            );
+        }
+
+        // Prevent inversed dates.
+        $start = DateTime::createFromFormat('Y-m-d', $date_start);
+        $end = DateTime::createFromFormat('Y-m-d', $date_end);
+        if ($end < $start) {
+            return new Response(
+                'Bad request: date_end must be greater than date_start',
                 Response::HTTP_BAD_REQUEST,
                 ['content-type' => 'application/text']
             );
