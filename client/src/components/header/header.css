@@ -18,14 +18,15 @@
     text-transform: none;
 }
 
-a.home {
-    background-color: #8b2635 !important;
-    font-size: 1.3rem;
-}
-
 a.active {
     background-color: #d2d4c8 !important;
     color: #2e3532 !important;
     font-weight: bold;
     font-size: 1.05rem;
+}
+
+a.home {
+    background-color: #8b2635 !important;
+    color: white !important;
+    font-size: 1.3rem;
 }
