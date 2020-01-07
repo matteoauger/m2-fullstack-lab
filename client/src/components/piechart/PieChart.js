@@ -77,7 +77,7 @@ class PieChart extends React.Component {
 
     var color = d3.scaleOrdinal()
       .domain(data)
-      .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56"]);
+      .range(["#6dd3ce", "#8b2635", "#c8e9a0", "#f7a278", "#9d5c63"]);
 
     const pie = d3.pie()
       .value(function(d) {
@@ -113,7 +113,7 @@ class PieChart extends React.Component {
 
   render(){
     return (
-      <div>
+      <div class="chart">
         <h2>Répartition des ventes par région</h2>
         <select value={this.state.year} onChange={this.changeYear}>
           <option value="2015">2015</option>
