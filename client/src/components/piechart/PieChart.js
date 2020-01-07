@@ -52,13 +52,20 @@ class PieChart extends React.Component {
   }
 
   drawChart() {
-    const width = 500;
-    const height = 500;
-    const margin = 100;
+    const width = 1000;
+    const height = 450;
+    const margin = 40;
     const holeSize = 100;
+    const MIN_SALE = 5;
 
     const radius = Math.min(width, height) / 2 - margin;
-    const data = this.state.data;
+    // preparing the data 
+    // setting to "Autre" every record with sales lesser than the MIN_SALE threshold
+    const data = this.state.data.filter((d) => d.sales.toFixed(0) > MIN_SALE);
+    const sales = 100 - data.reduce((d1, d2) => d1 + d2.sales || 0, 0);
+
+    if (sales && sales > .5)
+      data.push({stateName: "Autre", sales});
 
     const svg = d3.select("#piechart")
     .append("svg")
@@ -84,6 +91,16 @@ class PieChart extends React.Component {
         return d.sales;
       });
 
+      // The arc generator
+    const arc = d3.arc()
+      .innerRadius(radius * 0.5)         // This is the size of the donut hole
+      .outerRadius(radius * 0.8);
+
+    // Another arc that won't be drawn. Just for labels positioning
+    const outerArc = d3.arc()
+      .innerRadius(radius * 0.9)
+      .outerRadius(radius * 0.9);
+
     svg
       .selectAll('whatever')
       .data(pie(data))
@@ -99,7 +116,7 @@ class PieChart extends React.Component {
       .style("opacity", 0.7)
       .on("mouseover", function(d, i) {
         d3.select(this).style("opacity", 0.9);
-        tooltip.html(d.data.stateName + ": " + d.data.sales)
+        tooltip.html(d.data.stateName + ": " + d.data.sales.toFixed(2) + " %")
         .style("font-size", "20px")
         .style("left", margin + "px")	
         tooltip.style("opacity", 1);
@@ -108,11 +125,49 @@ class PieChart extends React.Component {
         d3.select(this).style("opacity", 0.7);
         tooltip.style("opacity", 0);
     });
+
+    // Add the polylines between chart and labels:
+svg
+  .selectAll('allPolylines')
+  .data(pie(data))
+  .enter()
+  .append('polyline')
+    .attr("stroke", "black")
+    .style("fill", "none")
+    .attr("stroke-width", 1)
+    .attr('points', function(d) {
+      var posA = arc.centroid(d) // line insertion in the slice
+      var posB = outerArc.centroid(d) // line break: we use the other arc generator that has been built only for that
+      var posC = outerArc.centroid(d); // Label position = almost the same as posB
+      var midangle = d.startAngle + (d.endAngle - d.startAngle) / 2 // we need the angle to see if the X position will be at the extreme right or extreme left
+      posC[0] = radius * 0.95 * (midangle < Math.PI ? 1 : -1); // multiply by 1 or -1 to put it on the right or on the left
+      return [posA, posB, posC]
+    })
+
+// Add the polylines between chart and labels:
+svg
+  .selectAll('allLabels')
+  .data(pie(data))
+  .enter()
+  .append('text')
+  .text( function(d) {  return `${d.data.stateName} (${d.data.sales.toFixed(0)} %)` } )
+    .attr('transform', function(d) {
+        var pos = outerArc.centroid(d);
+        var midangle = d.startAngle + (d.endAngle - d.startAngle) / 2
+        pos[0] = radius * 0.99 * (midangle < Math.PI ? 1 : -1);
+        return 'translate(' + pos + ')';
+    })
+    .style('text-anchor', function(d) {
+        var midangle = d.startAngle + (d.endAngle - d.startAngle) / 2
+        return (midangle < Math.PI ? 'start' : 'end')
+    })
+
+    
   }
 
   render(){
     return (
-      <div class="chart">
+      <div>
         <h2>Répartition des ventes par région</h2>
         <select value={this.state.year} onChange={this.changeYear}>
           <option value="2015">2015</option>
