@@ -1,0 +1,31 @@
+#header {
+    display: flex;
+    justify-content: space-around;
+
+    height: 70px;
+    margin-bottom: 10px;
+}
+
+#header > a {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    background-color: #2e3532;
+    color: white;
+    text-transform: none;
+}
+
+a.home {
+    background-color: #8b2635 !important;
+    font-size: 1.3rem;
+}
+
+a.active {
+    background-color: #d2d4c8 !important;
+    color: #2e3532 !important;
+    font-weight: bold;
+    font-size: 1.05rem;
+}

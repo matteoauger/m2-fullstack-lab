@@ -1,6 +1,6 @@
 import React from 'react';
 import * as d3 from 'd3';
-import { fetch } from './utils/dataAccess';
+import { fetch } from '../../utils/dataAccess';
 
 class PieChart extends React.Component {
   constructor(props) {
@@ -75,7 +75,9 @@ class PieChart extends React.Component {
 
     const color = d3.scaleOrdinal()
       .domain(data)
-      .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56"]);
+      .range(["#6dd3ce", "#8b2635", "#c8e9a0", "#f7a278", "#9d5c63", 
+              "#46351d", "#53d8fb", "#ff101f", "#fa8334", "#820263",
+              "#32de8a", "#d90368"]);
 
     const pie = d3.pie()
       .value(function(d) {
@@ -110,8 +112,8 @@ class PieChart extends React.Component {
 
   render(){
     return (
-      <div>
-        <h1>Répartition des ventes par région</h1>
+      <div class="chart">
+        <h2>Répartition des ventes par région</h2>
         <select value={this.state.year} onChange={this.changeYear}>
           <option value="2015">2015</option>
           <option value="2016">2016</option>

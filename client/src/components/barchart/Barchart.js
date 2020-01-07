@@ -1,6 +1,6 @@
 import React from 'react';
 import * as d3 from 'd3';
-import { fetch } from './utils/dataAccess';
+import { fetch } from '../../utils/dataAccess';
 class Barchart extends React.Component {
     constructor(props) {
         super(props)
@@ -16,7 +16,7 @@ class Barchart extends React.Component {
         })
     }
     componentDidMount() {
-      this.fetchData();
+        this.fetchData();
     }
     componentDidUpdate(prevProps, prevState) {
         if(prevState.interval !== this.state.interval || prevState.startDate !== this.state.startDate || prevState.endDate !== this.state.endDate) {
@@ -49,14 +49,14 @@ class Barchart extends React.Component {
             cache: 'default' 
         };
         fetch(`land_value_claims/salesbyinterval?interval=${encodeURIComponent(this.state.interval)}&date_start=${encodeURIComponent(this.state.startDate)}&date_end=${encodeURIComponent(this.state.endDate)}`, options)
-          .then((response) => {
+        .then((response) => {
             response.json().then((data) => {
-              this.setState({
-                data
-              })
+                this.setState({
+                    data
             })
-          })
-      }
+            })
+        })
+    }
     drawChart() {
         const data = this.state.data;
         const nbData = data.length;
@@ -90,9 +90,9 @@ class Barchart extends React.Component {
             .attr("y", (d, i) => height - (d.sales_count/maxData)*(height-20))
             .attr("width", barWidth - 1)
             .attr("height", (d, i) => (d.sales_count/maxData)*(height-20) - 3)
-            .attr("fill", "#0066cc")
+            .attr("fill", "#9d5c63")
             .on("mouseover", function(d, i) {
-                d3.select(this).attr("fill", "#0080ff");
+                d3.select(this).attr("fill", "#8b2635");
                 tooltip.html(d.current_date.slice(0,10)+"<br>"+d.sales_count + " ventes")
                     .style("font-size", "20px")
                     .style("text-anchor", "middle")
@@ -100,12 +100,12 @@ class Barchart extends React.Component {
                 tooltip.style("opacity", 1);
             })
             .on("mouseout", function(d) {
-                d3.select(this).attr("fill", "#0066cc");
+                d3.select(this).attr("fill", "#8b2635");
                 tooltip.style("opacity", 0);
             });
     }
     render() {
-        return <body>
+        return <div>
             <title>Nombre de ventes</title>
             <select value={this.state.interval} onChange={this.changeInterval}>
                 <option value="day">Jour</option>
@@ -116,7 +116,7 @@ class Barchart extends React.Component {
             <input type="date" name="endDate" value={this.state.endDate} onChange={this.changeEndDate}></input>
             <div id="barchart"></div>
             <div id="labels"></div>
-        </body>
+        </div>
     }
 };
 export default Barchart;
