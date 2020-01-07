@@ -65,6 +65,9 @@ class BarChart extends React.Component {
                 response.json().then((data) => {
                     this.setState({ data });
                 });
+            })
+            .catch((response) => {
+                this.setState({ data: []});
             });
     }
 
