@@ -1,6 +1,8 @@
 import React       from 'react';
 import { NavLink } from 'react-router-dom';
 
+import './header.css';
+
 /**
  * Header component.
  * Represents the header section of the react app.
@@ -13,12 +15,11 @@ export default class Header extends React.Component {
      */
     render() {
         return <nav id="header">
-            <NavLink activeClassName="active"       to="/">Imhotep</NavLink>
-            <NavLink activeClassName="active"       to="/timeseries">Evolution des prix</NavLink>
-            <NavLink activeClassName="active"       to="/barchart">Nombre de ventes</NavLink>
-            <NavLink activeClassName="active"       to="/graphs">Répartition géographique</NavLink>
-            <a class="nav-link-ext" href={`https://${document.domain}:8443`}>API</a>
-            <a class="nav-link-ext" href={`https://${document.domain}:444`}>Admin</a>
+            <NavLink to="/" exact     className="home" >Imhotep</NavLink>
+            <NavLink to="/timeseries" activeClassName="active">Evolution des prix</NavLink>
+            <NavLink to="/barchart"   activeClassName="active">Nombre de ventes</NavLink>
+            <NavLink to="/graphs"     activeClassName="active">Répartition géographique</NavLink>
+            <a href={`https://${document.domain}:8443`}>API</a>
         </nav>
     }
 }
