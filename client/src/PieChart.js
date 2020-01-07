@@ -37,7 +37,7 @@ class PieChart extends React.Component {
   }
 
   fetchData() {
-    var myInit = { method: 'GET',
+    const myInit = { method: 'GET',
                mode: 'cors',
                cache: 'default' };
     fetch(`land_value_claims/salesrepartition?year=${this.state.year}`, myInit)
@@ -56,12 +56,10 @@ class PieChart extends React.Component {
     const margin = 100;
     const holeSize = 100;
 
-    var radius = Math.min(width, height) / 2 - margin;
+    const radius = Math.min(width, height) / 2 - margin;
     const data = this.state.data;
 
-    console.log(data)
-
-    var svg = d3.select("#piechart")
+    let svg = d3.select("#piechart")
     .append("svg")
       .attr("width", width)
       .attr("height", height)
@@ -74,7 +72,7 @@ class PieChart extends React.Component {
       .attr("class", "tooltip")
       .style("opacity", 0);
 
-    var color = d3.scaleOrdinal()
+    const color = d3.scaleOrdinal()
       .domain(data)
       .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56"]);
 
