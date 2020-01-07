@@ -1,0 +1,13 @@
+body {
+    --bg-color: #d2d4c8;
+    --dark-gray: #2e3532;
+    --cherry: #8b2635;
+    --pale-chry: #9d5c63;
+    --gray: #817f82;
+
+    background-color: var(--bg-color) !important;
+}
+
+.chart {
+    margin: 5% 10% 5% 10%;
+}
