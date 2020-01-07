@@ -119,9 +119,9 @@ class Barchart extends React.Component {
             .attr("y", (d, i) => height - (d.sales_count/maxData)*(height-20))
             .attr("width", barWidth - 1)
             .attr("height", (d, i) => (d.sales_count/maxData)*(height-20) - 3)
-            .attr("fill", "#0066cc")
+            .attr("fill", "#9d5c63")
             .on("mouseover", function(d) {
-                d3.select(this).attr("fill", "#0080ff");
+                d3.select(this).attr("fill", "#8b2635");
                 tooltip.html(d.current_date + ": " + d.sales_count + " ventes")
                     .style("font-size", "20px")
                     .style("left", (d3.event.pageX) + "px")		
@@ -129,13 +129,13 @@ class Barchart extends React.Component {
                 tooltip.style("opacity", 1);
             })
             .on("mouseout", function(d) {
-                d3.select(this).attr("fill", "#0066cc");
+                d3.select(this).attr("fill", "#8b2635");
                 tooltip.style("opacity", 0);
             });
     }
 
     render() {
-        return <div>
+        return <div class="chart">
             <title>Evolution du nombre de ventes</title>
             <h2>Evolution du nombre de ventes</h2>
             <div id="barchart"></div>
