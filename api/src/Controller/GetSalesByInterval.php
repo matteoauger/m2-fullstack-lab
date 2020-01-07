@@ -26,6 +26,17 @@ class GetSalesByInterval
         $date_start = $data->query->get('date_start');
         $date_end = $data->query->get('date_end');
 
+        // Prevent SQL Injection.
+        if (!preg_match('/^(day|month|year)$/', $interval) ||
+            !preg_match('/^\d{1,4}-\d{1,2}-\d{1,2}$/', $date_start) ||
+            !preg_match('/^\d{1,4}-\d{1,2}-\d{1,2}$/', $date_end)) {
+            return new Response(
+                'Bad request',
+                Response::HTTP_BAD_REQUEST,
+                ['content-type' => 'application/text']
+            );
+        }
+
         // Prepares the request. 
         $request = "SELECT
                         DATE_TRUNC('$interval', c.mutationDate) AS current_date,

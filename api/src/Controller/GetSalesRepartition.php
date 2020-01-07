@@ -25,8 +25,17 @@ class GetSalesRepartition {
     }
 
     public function __invoke(Request $data) {
-        $year = $data->query->get("year");
+        $year = $data->query->get('year');
         
+        // Prevent SQL Injection.
+        if (!preg_match('/^\d+$/', $year)) {
+            return  new Response(
+                'Bad request',
+                Response::HTTP_BAD_REQUEST,
+                ['content-type' => 'application/text']
+            );
+        }
+
         // Fetch total LVC count for the given year.
         $request_count = "SELECT 
                             COUNT(lvc) FROM App:LandValueClaim lvc
@@ -34,7 +43,7 @@ class GetSalesRepartition {
 
         $lvc_total_count = $this->em->createQuery($request_count)->getSingleScalarResult();
 
-        // Prepares the request. 
+        // Prepares the request.
         $request = "SELECT
                         s.name AS stateName,
                         ((COUNT(lvc) + 0.0) / $lvc_total_count) * 100 AS sales
