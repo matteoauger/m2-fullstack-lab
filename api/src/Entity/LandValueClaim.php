@@ -28,7 +28,7 @@ use App\Entity\Department;
  *     "sales_repartition"={
  *         "method"="GET",
  *         "path"="land_value_claims/salesrepartition",
- *         "controller"=GetSalesRepartition::class,
+ *         "controller"=App\Controller\GetSalesRepartition::class,
  *         "pagination_enabled"=false,
  *         "read"=false,
  *         "openapi_context"={
