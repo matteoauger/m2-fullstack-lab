@@ -1,95 +1,69 @@
 import React from 'react';
 import * as d3 from 'd3';
-
+import { fetch } from './utils/dataAccess';
 class Barchart extends React.Component {
+    constructor(props) {
+        super(props)
+        this.fetchData = this.fetchData.bind(this)
+        this.changeInterval = this.changeInterval.bind(this)
+        this.changeStartDate = this.changeStartDate.bind(this)
+        this.changeEndDate = this.changeEndDate.bind(this)
+        this.state = ({
+            data: [],
+            interval: "month",
+            startDate: "2015-01-01",
+            endDate: "2016-01-01"
+        })
+    }
     componentDidMount() {
-      this.drawChart();
+      this.fetchData();
     }
- 
-    static_data() {
-        return [
-            { 
-                "current_date": "2019-01-02 51 51513",
-                "sales_count": 1000
-            },
-            { 
-                "current_date": "2019-01-03",
-                "sales_count": 536
-            },
-            { 
-                "current_date": "2019-01-04",
-                "sales_count": 340
-            },
-            { 
-                "current_date": "2019-01-05",
-                "sales_count": 860
-            },
-            { 
-                "current_date": "2019-01-06",
-                "sales_count": 910
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 453
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 752
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 962
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 357
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 852
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 354
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 753
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 159
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 357
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 854
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 910
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 654
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 456
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 658
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 851
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 359
-            },{ 
-                "current_date": "2019-01-06",
-                "sales_count": 645
-            }
-        ]
+    componentDidUpdate(prevProps, prevState) {
+        if(prevState.interval !== this.state.interval || prevState.startDate !== this.state.startDate || prevState.endDate !== this.state.endDate) {
+            this.fetchData()
+        }
+        d3.select("svg").remove()
+        if(prevState.data !== this.state.data) {
+            this.drawChart()
+        }
     }
-
+    changeInterval(event) {
+        this.setState({
+            interval: event.target.value
+        })
+    }
+    changeStartDate(event) {
+        this.setState({
+            startDate: event.target.value
+        })
+    }
+    changeEndDate(event) {
+        this.setState({
+            endDate: event.target.value
+        })
+    }
+    fetchData() {
+        const options = {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'default' 
+        };
+        fetch(`land_value_claims/salesbyinterval?interval=${encodeURIComponent(this.state.interval)}&date_start=${encodeURIComponent(this.state.startDate)}&date_end=${encodeURIComponent(this.state.endDate)}`, options)
+          .then((response) => {
+            response.json().then((data) => {
+              this.setState({
+                data
+              })
+            })
+          })
+      }
     drawChart() {
-        const data = this.static_data();
+        const data = this.state.data;
         const nbData = data.length;
         const maxData = d3.max(data, (d) => { return d.sales_count });
         const width = 1000;
         const height = 500;
         const barWidth = (width-50)/nbData;
-
         const svg = d3.select("#barchart")
             .append("svg")
             .attr("id", "graph")
@@ -101,17 +75,13 @@ class Barchart extends React.Component {
             .append("div")
             .attr("class", "tooltip")
             .style("opacity", 0);
-
         const y_scale = d3.scaleLinear()
             .domain([0, maxData])
             .range([height-25, 0]);
-
         const y_axis = d3.axisLeft().scale(y_scale);
-
         svg.append("g")
             .attr("transform", "translate(50, 20)")
-            .call(y_axis);   
-
+            .call(y_axis);
         svg.selectAll("rect")
             .data(data)
             .enter()
@@ -134,14 +104,19 @@ class Barchart extends React.Component {
                 tooltip.style("opacity", 0);
             });
     }
-
     render() {
         return <body>
-            <h1>Nombre de ventes</h1>
+            <title>Nombre de ventes</title>
+            <select value={this.state.interval} onChange={this.changeInterval}>
+                <option value="day">Jour</option>
+                <option value="month">Mois</option>
+                <option value="year">Année</option>
+            </select>
+            <input type="date" name="startDate" value={this.state.startDate} onChange={this.changeStartDate}></input>
+            <input type="date" name="endDate" value={this.state.endDate} onChange={this.changeEndDate}></input>
             <div id="barchart"></div>
             <div id="labels"></div>
         </body>
     }
 };
-
 export default Barchart;

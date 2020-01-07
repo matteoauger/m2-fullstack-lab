@@ -23,7 +23,7 @@ class PieChart extends React.Component {
     if(prevState.year !== this.state.year) {
       this.fetchData()
     }
-    d3.select("#svg").remove()
+    d3.select("svg").remove()
     if(prevState.data !== this.state.data) {
       this.drawChart()
     }
@@ -33,14 +33,15 @@ class PieChart extends React.Component {
     this.setState({
       year: event.target.value
     })
-    
   }
 
   fetchData() {
-    const myInit = { method: 'GET',
-               mode: 'cors',
-               cache: 'default' };
-    fetch(`land_value_claims/salesrepartition?year=${this.state.year}`, myInit)
+    const options = {
+      method: 'GET',
+      mode: 'cors',
+      cache: 'default' 
+    };
+    fetch(`land_value_claims/salesrepartition?year=${encodeURIComponent(this.state.year)}`, options)
       .then((response) => {
         response.json().then((data) => {
           this.setState({
@@ -59,7 +60,7 @@ class PieChart extends React.Component {
     const radius = Math.min(width, height) / 2 - margin;
     const data = this.state.data;
 
-    let svg = d3.select("#piechart")
+    const svg = d3.select("#piechart")
     .append("svg")
       .attr("width", width)
       .attr("height", height)
