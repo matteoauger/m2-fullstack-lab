@@ -43,10 +43,12 @@ class Barchart extends React.Component {
         })
     }
     fetchData() {
-        const myInit = { method: 'GET',
-                   mode: 'cors',
-                   cache: 'default' };
-        fetch(`land_value_claims/salesbyinterval?interval=${this.state.interval}&date_start=${this.state.startDate}&date_end=${this.state.endDate}`, myInit)
+        const options = {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'default' 
+        };
+        fetch(`land_value_claims/salesbyinterval?interval=${encodeURIComponent(this.state.interval)}&date_start=${encodeURIComponent(this.state.startDate)}&date_end=${encodeURIComponent(this.state.endDate)}`, options)
           .then((response) => {
             response.json().then((data) => {
               this.setState({

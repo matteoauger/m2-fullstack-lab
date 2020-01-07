@@ -36,10 +36,12 @@ class PieChart extends React.Component {
   }
 
   fetchData() {
-    const myInit = { method: 'GET',
-               mode: 'cors',
-               cache: 'default' };
-    fetch(`land_value_claims/salesrepartition?year=${this.state.year}`, myInit)
+    const options = {
+      method: 'GET',
+      mode: 'cors',
+      cache: 'default' 
+    };
+    fetch(`land_value_claims/salesrepartition?year=${encodeURIComponent(this.state.year)}`, options)
       .then((response) => {
         response.json().then((data) => {
           this.setState({
