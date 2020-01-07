@@ -1,6 +1,7 @@
 import React from 'react';
 import * as d3 from 'd3';
 import { fetch } from '../../utils/dataAccess';
+import MONTHS from '../../utils/months';
 class Barchart extends React.Component {
     constructor(props) {
         super(props)
@@ -79,6 +80,8 @@ class Barchart extends React.Component {
             .domain([0, maxData])
             .range([height-25, 0]);
         const y_axis = d3.axisLeft().scale(y_scale);
+        const self = this;
+
         svg.append("g")
             .attr("transform", "translate(50, 20)")
             .call(y_axis);
@@ -93,19 +96,37 @@ class Barchart extends React.Component {
             .attr("fill", "#9d5c63")
             .on("mouseover", function(d, i) {
                 d3.select(this).attr("fill", "#8b2635");
-                tooltip.html(d.current_date.slice(0,10)+"<br>"+d.sales_count + " ventes")
+                const date = new Date(d.current_date.slice(0,10));
+                console.log(date);
+                let htmlContent = ""; 
+                
+                // writing the day
+                if (self.state.interval === 'day') {
+                    htmlContent += " " + date.getDay();
+                }
+
+                // writing the month
+                if (self.state.interval === 'day' || self.state.interval === 'month') {
+                    htmlContent += " " + MONTHS[date.getMonth()];
+                }
+
+                // writing the year and the sales count
+                htmlContent += " " + date.getFullYear();
+                htmlContent += "<br/>" + d.sales_count + " ventes";
+
+                tooltip.html(htmlContent)
                     .style("font-size", "20px")
                     .style("text-anchor", "middle")
                     .style("left", (52+ (i+1) * barWidth + barWidth/2) + "px")		
                 tooltip.style("opacity", 1);
             })
             .on("mouseout", function(d) {
-                d3.select(this).attr("fill", "#8b2635");
+                d3.select(this).attr("fill", "#9d5c63");
                 tooltip.style("opacity", 0);
             });
     }
     render() {
-        return <div>
+        return <div className="chart">
             <title>Nombre de ventes</title>
             <select value={this.state.interval} onChange={this.changeInterval}>
                 <option value="day">Jour</option>

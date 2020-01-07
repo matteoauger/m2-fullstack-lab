@@ -117,7 +117,7 @@ class TimeSeriesGraph extends React.Component {
         
   render() {
     return (
-      <div class="chart">
+      <div className="chart">
         <h2>Prix moyen du m2</h2>
         <div id='graph'></div>
       </div>
