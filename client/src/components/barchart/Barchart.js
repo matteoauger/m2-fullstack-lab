@@ -100,7 +100,7 @@ class Barchart extends React.Component {
                 tooltip.style("opacity", 1);
             })
             .on("mouseout", function(d) {
-                d3.select(this).attr("fill", "#8b2635");
+                d3.select(this).attr("fill", "#9d5c63");
                 tooltip.style("opacity", 0);
             });
     }
