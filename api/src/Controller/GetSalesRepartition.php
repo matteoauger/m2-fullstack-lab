@@ -29,8 +29,8 @@ class GetSalesRepartition {
         
         // Prevent SQL Injection.
         if (!preg_match('/^\d+$/', $year)) {
-            return  new Response(
-                'Bad request',
+            return new Response(
+                'Bad request: Illegal year',
                 Response::HTTP_BAD_REQUEST,
                 ['content-type' => 'application/text']
             );

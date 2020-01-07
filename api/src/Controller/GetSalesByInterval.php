@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 class GetSalesByInterval
 {
     /**
-     * Entity Manager 
+     * Entity Manager
      */
     private $em;
 
@@ -20,6 +20,10 @@ class GetSalesByInterval
         $this->em = $em;
     }
 
+    function checkParam($param, $pattern, $error_message) {
+        
+    }
+
     public function __invoke(Request $data) 
     {
         $interval = $data->query->get('interval');
@@ -27,11 +31,25 @@ class GetSalesByInterval
         $date_end = $data->query->get('date_end');
 
         // Prevent SQL Injection.
-        if (!preg_match('/^(day|month|year)$/', $interval) ||
-            !preg_match('/^\d{1,4}-\d{1,2}-\d{1,2}$/', $date_start) ||
-            !preg_match('/^\d{1,4}-\d{1,2}-\d{1,2}$/', $date_end)) {
+        if (!preg_match('/^(day|month|year)$/', $interval)) {
             return new Response(
-                'Bad request',
+                'Bad request: Illegal interval',
+                Response::HTTP_BAD_REQUEST,
+                ['content-type' => 'application/text']
+            );
+        }
+
+        if (!preg_match('/^\d{1,4}-\d{1,2}-\d{1,2}$/', $date_start)) {
+            return new Response(
+                'Bad request: Illegal date_start',
+                Response::HTTP_BAD_REQUEST,
+                ['content-type' => 'application/text']
+            );
+        }
+
+        if (!preg_match('/^\d{1,4}-\d{1,2}-\d{1,2}$/', $date_end)) {
+            return new Response(
+                'Bad request: Illegal date_end',
                 Response::HTTP_BAD_REQUEST,
                 ['content-type' => 'application/text']
             );
@@ -69,4 +87,3 @@ class GetSalesByInterval
         return $response;
     }
 }
-?>
