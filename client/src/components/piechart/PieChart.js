@@ -77,7 +77,9 @@ class PieChart extends React.Component {
 
     var color = d3.scaleOrdinal()
       .domain(data)
-      .range(["#6dd3ce", "#8b2635", "#c8e9a0", "#f7a278", "#9d5c63"]);
+      .range(["#6dd3ce", "#8b2635", "#c8e9a0", "#f7a278", "#9d5c63", 
+              "#46351d", "#53d8fb", "#ff101f", "#fa8334", "#820263",
+              "#32de8a", "#d90368"]);
 
     const pie = d3.pie()
       .value(function(d) {
