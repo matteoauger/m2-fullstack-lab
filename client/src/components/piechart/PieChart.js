@@ -1,6 +1,6 @@
 import React from 'react';
 import * as d3 from 'd3';
-import { fetch } from './utils/dataAccess';
+import { fetch } from '../../utils/dataAccess';
 
 class PieChart extends React.Component {
   constructor(props) {

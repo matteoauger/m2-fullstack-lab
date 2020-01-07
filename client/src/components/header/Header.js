@@ -17,8 +17,8 @@ export default class Header extends React.Component {
             <NavLink activeClassName="active"       to="/timeseries">Evolution des prix</NavLink>
             <NavLink activeClassName="active"       to="/barchart">Nombre de ventes</NavLink>
             <NavLink activeClassName="active"       to="/graphs">Répartition géographique</NavLink>
-            <a href={`https://${document.domain}:8443`}>API</a>
-            <a href={`https://${document.domain}:444`}>Admin</a>
+            <a class="nav-link-ext" href={`https://${document.domain}:8443`}>API</a>
+            <a class="nav-link-ext" href={`https://${document.domain}:444`}>Admin</a>
         </nav>
     }
 }

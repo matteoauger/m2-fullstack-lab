@@ -15,11 +15,11 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.css';
 import * as serviceWorker from './serviceWorker';
 // Import your reducers and routes here
-import Welcome from './Welcome';
-import TimeSeriesGraph from "./TimeSeriesGraph";
-import Barchart from './Barchart';
-import PieChart from './PieChart';
-import Header   from './Header';
+import Welcome from './components/welcome/Welcome';
+import TimeSeriesGraph from "./components/timeseries/TimeSeriesGraph";
+import Barchart from './components/barchart/Barchart';
+import PieChart from './components/piechart/PieChart';
+import Header   from './components/header/Header';
 
 const history = createBrowserHistory();
 const store = createStore(
