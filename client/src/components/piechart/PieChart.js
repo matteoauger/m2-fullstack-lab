@@ -167,7 +167,7 @@ svg
 
   render(){
     return (
-      <div>
+      <div className="chart">
         <h2>Répartition des ventes par région</h2>
         <select value={this.state.year} onChange={this.changeYear}>
           <option value="2015">2015</option>

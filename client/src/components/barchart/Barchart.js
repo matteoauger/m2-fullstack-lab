@@ -126,7 +126,7 @@ class Barchart extends React.Component {
             });
     }
     render() {
-        return <div>
+        return <div className="chart">
             <title>Nombre de ventes</title>
             <select value={this.state.interval} onChange={this.changeInterval}>
                 <option value="day">Jour</option>
