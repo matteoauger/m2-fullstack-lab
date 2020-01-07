@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -8,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 class GetSalesByInterval
 {
     /**
-     * Entity Manager 
+     * Entity Manager
      */
     private $em;
 
@@ -27,11 +28,36 @@ class GetSalesByInterval
         $date_end = $data->query->get('date_end');
 
         // Prevent SQL Injection.
-        if (!preg_match('/^(day|month|year)$/', $interval) ||
-            !preg_match('/^\d{1,4}-\d{1,2}-\d{1,2}$/', $date_start) ||
-            !preg_match('/^\d{1,4}-\d{1,2}-\d{1,2}$/', $date_end)) {
+        if (!preg_match('/^(day|month|year)$/', $interval)) {
             return new Response(
-                'Bad request',
+                'Bad request: Illegal interval',
+                Response::HTTP_BAD_REQUEST,
+                ['content-type' => 'application/text']
+            );
+        }
+
+        if (!preg_match('/^\d{1,4}-\d{1,2}-\d{1,2}$/', $date_start)) {
+            return new Response(
+                'Bad request: Illegal date_start',
+                Response::HTTP_BAD_REQUEST,
+                ['content-type' => 'application/text']
+            );
+        }
+
+        if (!preg_match('/^\d{1,4}-\d{1,2}-\d{1,2}$/', $date_end)) {
+            return new Response(
+                'Bad request: Illegal date_end',
+                Response::HTTP_BAD_REQUEST,
+                ['content-type' => 'application/text']
+            );
+        }
+
+        // Prevent inversed dates.
+        $start = DateTime::createFromFormat('Y-m-d', $date_start);
+        $end = DateTime::createFromFormat('Y-m-d', $date_end);
+        if ($end < $start) {
+            return new Response(
+                'Bad request: date_start must be before date_end',
                 Response::HTTP_BAD_REQUEST,
                 ['content-type' => 'application/text']
             );
@@ -69,4 +95,3 @@ class GetSalesByInterval
         return $response;
     }
 }
-?>

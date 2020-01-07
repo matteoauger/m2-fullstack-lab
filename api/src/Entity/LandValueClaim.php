@@ -5,9 +5,6 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Validator\Constraint as AcmeAssert;
-use App\Controller\GetMeanPricesByYear;
-use App\Controller\GetSalesRepartition;
 use Doctrine\ORM\Mapping\JoinColumn;
 use App\Entity\Department;
 
@@ -16,8 +13,6 @@ use App\Entity\Department;
  *
  * @ApiResource(
  * collectionOperations={
- *     "get",
- *     "post",
  *     "meanprices"={
  *         "method"="GET",
  *         "path"="land_value_claims/meanprices",
@@ -33,7 +28,7 @@ use App\Entity\Department;
  *     "sales_repartition"={
  *         "method"="GET",
  *         "path"="land_value_claims/salesrepartition",
- *         "controller"=GetSalesRepartition::class,
+ *         "controller"=App\Controller\GetSalesRepartition::class,
  *         "pagination_enabled"=false,
  *         "read"=false,
  *         "openapi_context"={
@@ -97,7 +92,7 @@ use App\Entity\Department;
  *          }
  *      }
  * },
- * itemOperations={"get", "patch", "put", "delete"}
+ * itemOperations={}
  * )
  * @ORM\Entity
  * @ORM\Table(name="land_value_claim",indexes={@ORM\Index(name="mutation_idx", columns={"mutation_date", "mutation_type"})})
