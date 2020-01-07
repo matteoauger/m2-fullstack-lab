@@ -280,12 +280,12 @@ class TimeSeriesGraph extends React.Component {
     
     d3.select('path')
       .attr('d', lineGenerator(points))
-      .style("stroke", "#0297db");
+      .style("stroke", "#8b2635");
   }
         
   render() {
     return (
-      <div>
+      <div class="chart">
         <h2>Prix moyen du m2</h2>
         <div id='graph'></div>
       </div>
