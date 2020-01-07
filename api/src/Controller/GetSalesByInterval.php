@@ -57,7 +57,7 @@ class GetSalesByInterval
         $end = DateTime::createFromFormat('Y-m-d', $date_end);
         if ($end < $start) {
             return new Response(
-                'Bad request: date_end must be greater than date_start',
+                'Bad request: date_start must be before date_end',
                 Response::HTTP_BAD_REQUEST,
                 ['content-type' => 'application/text']
             );
